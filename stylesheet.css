@@ -1,0 +1,20 @@
+:root {
+  --text-colour: rgb(58, 58, 58);
+}
+
+body {
+  font-family: sans-serif;
+  color: var(--text-colour);
+  background-color: antiquewhite;
+}
+main {
+  margin: 10vw;
+}
+
+/* Main Text Controls */
+h1 {
+  font-size: 6em;
+}
+h2 {
+  font-size: 2em;
+}
