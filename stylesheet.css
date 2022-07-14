@@ -1,9 +1,18 @@
+@font-face {
+  font-family: Metropolis-Bold;
+  src: url("/Fonts/Metropolis-Bold.woff2");
+}
+@font-face {
+  font-family: Metropolis-Medium;
+  src: url("/Fonts/Metropolis-Medium.woff2");
+}
+
 :root {
   --text-colour: rgb(58, 58, 58);
 }
 
 body {
-  font-family: sans-serif;
+  font-family: Metropolis-Bold;
   color: var(--text-colour);
   background-color: antiquewhite;
 }
@@ -13,8 +22,36 @@ main {
 
 /* Main Text Controls */
 h1 {
+  font-family: Metropolis-Medium;
+  letter-spacing: 2px;
+  font-weight: normal;
   font-size: 6em;
+
+  margin-top: 40px;
+  margin-bottom: 80px;
 }
 h2 {
   font-size: 2em;
+}
+
+.contact-button {
+  width: fit-content;
+  padding: 15px;
+  padding-top: 12px;
+  padding-bottom: 8px;
+
+  border-style: solid;
+  border-width: 5px;
+  border-radius: 1vw;
+  border-color: var(--text-colour);
+
+  font-size: 2em;
+}
+
+.scroll-request-text {
+  font-family: Metropolis-Medium;
+  font-weight: normal;
+  font-size: 1.3em;
+
+  margin-top: 4vh;
 }
