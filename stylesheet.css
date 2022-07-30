@@ -1,57 +1,90 @@
 @font-face {
-  font-family: Metropolis-Bold;
+  font-family: main-bold;
   src: url("/Fonts/Metropolis-Bold.woff2");
 }
 @font-face {
-  font-family: Metropolis-Medium;
+  font-family: main-mid;
   src: url("/Fonts/Metropolis-Medium.woff2");
+}
+@font-face {
+  font-family: main-light;
+  src: url("/Fonts/Metropolis-Extralight.woff2");
+}
+@font-face {
+  font-family: running-text;
+  src: url("/Fonts/BAHNSCHRIFT.TTF");
 }
 
 :root {
-  --text-colour: rgb(58, 58, 58);
+  --accent: #f5cb5c;
+  --off-black: #242423;
+  --dark-text: #b8b6b6;
+  --off-white: #e8eddf;
+  --background: #333533;
+
+  --shadow: rgba(0, 0, 0, 0.3);
 }
 
+/* Generic Roles */
+.has-shadow {
+  filter: drop-shadow(-3px 3px 3px var(--shadow));
+}
+
+/* Alignment Items */
 body {
-  font-family: Metropolis-Bold;
-  color: var(--text-colour);
-  background-color: antiquewhite;
+  font-family: main-bold;
+  color: var(--off-white);
+  background-color: var(--background);
 }
 main {
-  margin: 10vw;
+  margin: 12vw;
 }
 
 /* Main Text Controls */
 h1 {
-  font-family: Metropolis-Medium;
+  font-family: main-mid;
   letter-spacing: 2px;
   font-weight: normal;
-  font-size: 6em;
+  font-size: 5em;
 
-  margin-top: 40px;
+  margin-top: 30px;
   margin-bottom: 80px;
 }
 h2 {
-  font-size: 2em;
+  font-family: main-light;
+  font-size: 1.2em;
+  font-weight: lighter;
+
+  color: var(--dark-text);
 }
 
+/* Landing Page */
+.contact-or-scroll-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+}
 .contact-button {
   width: fit-content;
-  padding: 15px;
-  padding-top: 12px;
-  padding-bottom: 8px;
+  padding: 40px;
+  padding-top: 20px;
+  padding-bottom: 18px;
 
   border-style: solid;
-  border-width: 5px;
-  border-radius: 1vw;
-  border-color: var(--text-colour);
+  border-width: 3px;
+  border-radius: 15px;
+  border-color: var(--accent);
 
-  font-size: 2em;
+  font-size: 1.5em;
+  font-family: main-light;
+  color: var(--accent);
 }
-
 .scroll-request-text {
-  font-family: Metropolis-Medium;
-  font-weight: normal;
-  font-size: 1.3em;
+  font-family: running-text;
+  font-weight: 100;
+  font-size: 1em;
+  color: var(--dark-text);
 
-  margin-top: 4vh;
+  margin-top: 1vh;
 }
