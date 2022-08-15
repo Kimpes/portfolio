@@ -76,9 +76,16 @@ a {
   align-content: center;
   color: var(--dark-text);
   cursor: pointer;
+
+  position: relative;
+  top: 5px;
+}
+.navbar-item:hover{
+  color: var(--accent);
 }
 .current-page{
   background-color: var(--background);
+  border-radius: 7px 7px 0px 0px;
 }
 .navbar-head-container{
   height: 90px;
