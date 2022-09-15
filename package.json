@@ -1,0 +1,24 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "logic.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node logic.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kimpes/portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kimpes/portfolio/issues"
+  },
+  "homepage": "https://github.com/Kimpes/portfolio#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
