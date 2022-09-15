@@ -30,6 +30,8 @@ app.set("view engine", "hbs");
 //   res.render("show-all-humans.hbs", model);
 // });
 
+app.use(express.static("public"));
+
 app.get("/works", function (req, res) {
   res.render("works.hbs");
 });
