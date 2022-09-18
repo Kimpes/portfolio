@@ -23,12 +23,12 @@ app.engine(
 );
 app.set("view engine", "hbs");
 
-// app.get("/", function (req, res) {
-//   const model = {
-//     humans: dummyData.humans,
-//   };
-//   res.render("show-all-humans.hbs", model);
-// });
+app.get("/", function (req, res) {
+  const model = {
+    humans: dummyData.humans,
+  };
+  res.render("show-all-humans.hbs", model);
+});
 
 app.use(express.static("public"));
 
