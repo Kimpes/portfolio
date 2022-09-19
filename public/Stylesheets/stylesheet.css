@@ -175,8 +175,10 @@ p {
 
 /*---------------------------------- Works Display ----------------------------------*/
 .works-grid {
+  margin-top: 10vh;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(800px, 0px));
+  grid-template-columns: auto;
+  /* grid-template-columns: repeat(auto-fill, minmax(800px, 0px)); */
   /* grid-template-rows: repeat(auto-fill, minmax(400px, 0px)); */
   row-gap: 50px;
 
@@ -184,8 +186,15 @@ p {
 }
 .work-container {
   /* position: relative; */
-  width: 700px;
+  width: calc(20vw + 600px);
   /* height: 337px; */
+}
+@media screen and (max-width: 900px) {
+  .work-container {
+    width: 100vw;
+    margin: 0px;
+    padding: 0px;
+  }
 }
 .work-thumbnail {
   width: inherit;
@@ -227,11 +236,11 @@ p {
 }
 .work-info {
   padding-left: 3px;
-  width: 500px;
+  width: calc(20vw + 300px);
 }
 .work-date {
   padding-left: 3px;
-  padding-bottom: 25px;
+  padding-bottom: 30px;
 }
 
 /*---------------------------------- Contact Page -----------------------------------*/
