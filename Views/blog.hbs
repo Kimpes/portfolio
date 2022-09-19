@@ -1,15 +1,21 @@
-<body>
-  <header>
-    <div class="navbar-container">
-      <div class="navbar">
-        <a href="./index" class="navbar-item">Home</a>
-        <a href="./works" class="navbar-item">Works</a>
-        <div class="navbar-head-container">
-          <img src="../Images/Kim_Cat_Small.png" alt="" class="navbar-head" />
-        </div>
-        <a href="./blog" class="current-page navbar-item">Blog</a>
-        <a href="./qna" class="navbar-item">QnA</a>
-      </div>
+<main>
+  <h1>The Thoughts of a Filip</h1>
+  <div class="blog-container">
+    <div class="blog-entry">
+      <h2>This is the fourth thought of a Filip</h2>
+      <p>
+        lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
+        semper nisi. Aenean vulputate eleifend tte, dapibus in, viverra quis,
+        feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.
+        Quisque rutrum. Aenean imperdiet</p>
+      <span>Filip Gustafsson | 22-09-22 </span>
     </div>
-  </header>
-</body>
+    {{#each posts}}
+      <div class="blog-entry">
+        <h2>{{title}}</h2>
+        <p>{{description}}</p>
+        <span>Filip Gustafsson | {{post_date}}</span>
+      </div>
+    {{/each}}
+  </div>
+</main>

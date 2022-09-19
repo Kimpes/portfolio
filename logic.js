@@ -24,10 +24,7 @@ app.engine(
 app.set("view engine", "hbs");
 
 app.get("/", function (req, res) {
-  const model = {
-    humans: dummyData.humans,
-  };
-  res.render("show-all-humans.hbs", model);
+  res.render("index.hbs");
 });
 
 app.use(express.static("public"));
@@ -39,10 +36,16 @@ app.get("/index", function (req, res) {
   res.render("index.hbs");
 });
 app.get("/blog", function (req, res) {
-  res.render("blog.hbs");
+  const model = {
+    posts: dummyData.blog_posts,
+  };
+  res.render("blog.hbs", model);
 });
-app.get("/qna", function (req, res) {
-  res.render("qna.hbs");
+app.get("/contact", function (req, res) {
+  const model = {
+    entries: dummyData.faq_entries,
+  };
+  res.render("contact.hbs", model);
 });
 
 app.listen(8080);

@@ -25,8 +25,8 @@ body {
   cursor: default;
 }
 main {
-  margin-left: 6vw;
-  margin-top: 6vw;
+  margin: 6vw;
+  margin-left: 12vw;
 }
 footer {
   margin-left: 12vw;
@@ -56,16 +56,19 @@ a:hover {
   cursor: pointer;
   color: var(--accent);
 }
+p {
+  margin-bottom: 1rem;
+}
 
 /*---------------------------------- Navbar -------------------------------------------*/
-.navbar-container{
+.navbar-container {
   width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   background-color: var(--off-black);
 }
-.navbar{
+.navbar {
   height: 50px;
 
   display: grid;
@@ -75,7 +78,7 @@ a:hover {
   justify-content: center;
   column-gap: calc(8vw - 50px);
 }
-.navbar-item{
+.navbar-item {
   height: 40px;
   line-height: 40px;
   width: 100px;
@@ -88,14 +91,14 @@ a:hover {
   position: relative;
   top: 5px;
 }
-.navbar-item:hover{
+.navbar-item:hover {
   color: var(--accent);
 }
-.current-page{
+.current-page {
   background-color: var(--background);
   border-radius: 7px 7px 0px 0px;
 }
-.navbar-head-container{
+.navbar-head-container {
   height: 90px;
   width: 90px;
   border-radius: 100%;
@@ -108,20 +111,18 @@ a:hover {
 
   cursor: pointer;
 }
-.navbar-head{
+.navbar-head {
   position: relative;
   width: auto;
   right: 1px;
 }
 
-
 /*---------------------------------- Landing Page Classes -----------------------------*/
-.landing-page-grid{
+.landing-page-grid {
   display: grid;
   grid-template-columns: auto auto;
-  margin-left: 6vw;
 }
-.landing-page-info{
+.landing-page-info {
   margin-top: 6vw;
 }
 .contact-or-scroll-container {
@@ -153,41 +154,41 @@ a:hover {
 
   margin-top: 1vh;
 }
-.portrait{
+.portrait {
   width: 15vw;
 }
-.login-container{
+.login-container {
   width: 400px;
 }
-.btn.btn-primary{
+.btn.btn-primary {
   margin-top: 10px;
   background: var(--background);
   border-color: var(--accent);
   color: var(--accent);
 }
-.btn.btn-primary:hover{
+.btn.btn-primary:hover {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--off-black);
 }
 
 /*---------------------------------- Works Display ----------------------------------*/
-.works-grid{
+.works-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(800px, 0px));
   grid-template-rows: repeat(auto-fill, minmax(400px, 0px));
 
   justify-content: center;
 }
-.work-container{
+.work-container {
   position: relative;
   width: 700px;
   height: 337px;
 }
-.work-thumbnail{
+.work-thumbnail {
   width: inherit;
 }
-.work-info-container{
+.work-info-container {
   z-index: -1;
   height: 337px;
   padding-left: 60px;
@@ -197,19 +198,19 @@ a:hover {
   bottom: 337px;
   background-color: var(--background);
 }
-.work-title{
+.work-title {
   font-weight: 600;
   font-size: 4em;
   margin-bottom: 10px;
   margin-top: 0px;
   padding-top: 35px;
 }
-.work-tags-container{
+.work-tags-container {
   display: flex;
   flex-direction: row;
   column-gap: 10px;
 }
-.work-tags{
+.work-tags {
   padding: 7px;
   padding-left: 10px;
   padding-right: 10px;
@@ -221,14 +222,34 @@ a:hover {
   border-radius: 10px;
   border-color: var(--off-white);
 }
-.work-info{
+.work-info {
   padding-left: 3px;
   width: 500px;
 }
 
+/*---------------------------------- Contact Page -----------------------------------*/
+
+.faq-container {
+  margin-top: 20vh;
+  width: 60vw;
+}
+.faq-question {
+  font-size: 1.5em;
+}
+
+/*---------------------------------- Blog Page --------------------------------------*/
+
+.blog-container {
+  width: 60vw;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 70px;
+}
+
 /*---------------------------------- Animations -------------------------------------*/
 
-.work-thumbnail:hover{
+.work-thumbnail:hover {
   opacity: 15%;
   filter: blur(5px);
   z-index: -2;
