@@ -2,7 +2,7 @@
   <div class="works-grid">
     <div class="work-container has-shadow">
       <img
-        src="../Images/work_skogskott.png"
+        src="/Images/work_skogskott.png"
         alt="image of a couple logos and label designs for gin bottles"
         class="work-thumbnail"
       />
@@ -17,64 +17,22 @@
           Nisl purus in mollis nunc sed id semper risus.consectetur adipiscing
           elit, sed do eiusmod tempor incididunt ut labore et dolore magna
           aliqua. Nisl purus in mollis nunc sed id semper risus.</p>
+        <p class="work-date">20210815</p>
       </div>
     </div>
-    <div class="work-container has-shadow">
-      <img
-        src="../Images/work_skogskott.png"
-        alt="image of a couple logos and label designs for gin bottles"
-        class="work-thumbnail"
-      />
-      <div class="work-info-container">
-        <h1 class="work-title">Skogskott</h1>
-        <div class="work-tags-container">
-          <p class="work-tags">Graphic Design</p>
-          <p class="work-tags">Brand Identity</p>
+    {{#each entries}}
+      <div class="work-container has-shadow">
+        <img src="/Images/{{image_name}}.png" alt="" class="work-thumbnail" />
+        <div class="work-info-container">
+          <h1 class="work-title">{{title}}</h1>
+          <div class="work-tags-container">
+            <p class="work-tags">{{tag_1}}</p>
+            <p class="work-tags">{{tag_2}}</p>
+          </div>
+          <p class="work-info">{{description}}</p>
+          <p class="work-date">{{post_date}}</p>
         </div>
-        <p class="work-info">Lorem ipsum dolor sit amet, consectetur adipiscing
-          elit, sed do smod tempor incididunt ut labore et dolore magna aliqua.
-          Nisl purus in mollis nunc sed id semper risus.consectetur adipiscing
-          elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-          aliqua. Nisl purus in mollis nunc sed id semper risus.</p>
       </div>
-    </div>
-    <div class="work-container has-shadow">
-      <img
-        src="../Images/work_skogskott.png"
-        alt="image of a couple logos and label designs for gin bottles"
-        class="work-thumbnail"
-      />
-      <div class="work-info-container">
-        <h1 class="work-title">Skogskott</h1>
-        <div class="work-tags-container">
-          <p class="work-tags">Graphic Design</p>
-          <p class="work-tags">Brand Identity</p>
-        </div>
-        <p class="work-info">Lorem ipsum dolor sit amet, consectetur adipiscing
-          elit, sed do smod tempor incididunt ut labore et dolore magna aliqua.
-          Nisl purus in mollis nunc sed id semper risus.consectetur adipiscing
-          elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-          aliqua. Nisl purus in mollis nunc sed id semper risus.</p>
-      </div>
-    </div>
-    <div class="work-container has-shadow">
-      <img
-        src="../Images/work_skogskott.png"
-        alt="image of a couple logos and label designs for gin bottles"
-        class="work-thumbnail"
-      />
-      <div class="work-info-container">
-        <h1 class="work-title">Skogskott</h1>
-        <div class="work-tags-container">
-          <p class="work-tags">Graphic Design</p>
-          <p class="work-tags">Brand Identity</p>
-        </div>
-        <p class="work-info">Lorem ipsum dolor sit amet, consectetur adipiscing
-          elit, sed do smod tempor incididunt ut labore et dolore magna aliqua.
-          Nisl purus in mollis nunc sed id semper risus.consectetur adipiscing
-          elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-          aliqua. Nisl purus in mollis nunc sed id semper risus.</p>
-      </div>
-    </div>
+    {{/each}}
   </div>
 </main>

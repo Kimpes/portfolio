@@ -30,7 +30,10 @@ app.get("/", function (req, res) {
 app.use(express.static("public"));
 
 app.get("/works", function (req, res) {
-  res.render("works.hbs");
+  const model = {
+    entries: dummyData.portfolio_entries,
+  };
+  res.render("works.hbs", model);
 });
 app.get("/index", function (req, res) {
   res.render("index.hbs");
@@ -60,3 +63,9 @@ app.listen(8080);
 //response.render("file.hbs") or something like that.
 //use different hbs for different pages?
 //static middlewear to find public files for easy access?
+
+//TODO:
+// - add empty states for all resources
+// - correct implementation of the date system
+// - reverse chronological order
+// - make responsiveness, add breakpoints for grids n shit

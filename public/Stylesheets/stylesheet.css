@@ -4,6 +4,7 @@
   --dark-text: #b8b6b6;
   --off-white: #e8eddf;
   --background: #333533;
+  --background-2: #4d4f4d;
 
   --shadow: rgba(0, 0, 0, 0.3);
 }
@@ -29,8 +30,8 @@ main {
   margin-left: 12vw;
 }
 footer {
+  margin: 6vw;
   margin-left: 12vw;
-  margin-top: 6vw;
 }
 
 /*---------------------------------- Text Classes -------------------------------------*/
@@ -176,34 +177,35 @@ p {
 .works-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(800px, 0px));
-  grid-template-rows: repeat(auto-fill, minmax(400px, 0px));
+  /* grid-template-rows: repeat(auto-fill, minmax(400px, 0px)); */
+  row-gap: 50px;
 
   justify-content: center;
 }
 .work-container {
-  position: relative;
+  /* position: relative; */
   width: 700px;
-  height: 337px;
+  /* height: 337px; */
 }
 .work-thumbnail {
   width: inherit;
 }
 .work-info-container {
-  z-index: -1;
-  height: 337px;
+  /* z-index: -1; */
+  height: auto;
   padding-left: 60px;
   padding-top: 0px;
   padding-bottom: 0px;
-  position: relative;
-  bottom: 337px;
-  background-color: var(--background);
+  /* position: relative;
+  bottom: 337px; */
+  background-color: var(--background-2);
 }
 .work-title {
   font-weight: 600;
   font-size: 4em;
   margin-bottom: 10px;
   margin-top: 0px;
-  padding-top: 35px;
+  padding-top: 25px;
 }
 .work-tags-container {
   display: flex;
@@ -215,6 +217,7 @@ p {
   padding-left: 10px;
   padding-right: 10px;
   margin: 3px;
+  margin-bottom: 15px;
   font-weight: 500;
 
   border-style: solid;
@@ -225,6 +228,10 @@ p {
 .work-info {
   padding-left: 3px;
   width: 500px;
+}
+.work-date {
+  padding-left: 3px;
+  padding-bottom: 25px;
 }
 
 /*---------------------------------- Contact Page -----------------------------------*/
@@ -249,8 +256,8 @@ p {
 
 /*---------------------------------- Animations -------------------------------------*/
 
-.work-thumbnail:hover {
+/* .work-thumbnail:hover {
   opacity: 15%;
   filter: blur(5px);
   z-index: -2;
-}
+} */

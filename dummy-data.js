@@ -40,29 +40,30 @@ exports.portfolio_entries = [
     id: 0,
     title: "Skogskott",
     description:
-      "Brandind for a gin bottle made in northern sweden done for a school assignment.",
+      "Branding for a gin bottle made in northern sweden done for a school assignment. The commissioned company wanted something that looked clean and modern but still had its connections to nature intact.",
     post_date: 20220911,
     tag_1: "Company Branding",
     tag_2: "Graphic Design",
-    image_name: "skogskott",
+    image_name: "work_skogskott",
   },
   {
     id: 1,
     title: "New Epsilon",
-    description: "website with rockets n shit.",
+    description:
+      "An e-commerce website made for a school assignment. Requirements were very non-specific and as such we decided to indulge a more visually unique style and theme.",
     post_date: 20220912,
     tag_1: "Company Branding",
     tag_2: "Graphic Design",
-    image_name: "skogskott",
+    image_name: "work_skogskott",
   },
   {
     id: 2,
     title: "Catformer",
     description:
-      "Cat platforming game made to demonstrate proficiency in JavaScript. Don't look at the visuals plz.",
+      "Cat platforming game made to demonstrate proficiency in JavaScript. I am half graphic designer, but in this assigment we were told to not focus on the visuals, so I ask of you all to do the same.",
     post_date: 20220919,
     tag_1: "Company Branding",
     tag_2: "Graphic Design",
-    image_name: "skogskott",
+    image_name: "work_skogskott",
   },
 ];
