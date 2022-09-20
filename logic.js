@@ -15,23 +15,26 @@ app.use(express.static("public"));
 
 //this section handles all get requests for pages
 app.get("/", function (req, res) {
-  res.render("index.hbs");
+  res.render("index.hbs", { homePage: true });
 });
 app.get("/works", function (req, res) {
   const model = {
     entries: dummyData.portfolioEntries,
+    worksPage: true,
   };
   res.render("works.hbs", model);
 });
 app.get("/blog", function (req, res) {
   const model = {
     posts: dummyData.blogPosts,
+    blogPage: true,
   };
   res.render("blog.hbs", model);
 });
 app.get("/contact", function (req, res) {
   const model = {
     entries: dummyData.faqEntries,
+    contactPage: true,
   };
   res.render("contact.hbs", model);
 });
