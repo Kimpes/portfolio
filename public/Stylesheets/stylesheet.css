@@ -60,6 +60,11 @@ a:hover {
 p {
   margin-bottom: 1rem;
 }
+@media screen and (max-width: 700px) {
+  h1 {
+    font-size: 10vw;
+  }
+}
 
 /*---------------------------------- Navbar -------------------------------------------*/
 .navbar-container {
@@ -110,12 +115,30 @@ p {
   position: relative;
   top: 10px;
 
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 .navbar-head {
   position: relative;
   width: auto;
   right: 1px;
+}
+@media screen and (max-width: 500px) {
+  .navbar-head-container {
+    height: 0px;
+    width: 0px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .navbar {
+    grid-template-columns: auto;
+    height: 180px;
+  }
+  .current-page {
+    border-radius: 7px 7px 7px 7px;
+  }
+  /* .navbar-item {
+    width: 100vw;
+  } */
 }
 
 /*---------------------------------- Landing Page Classes -----------------------------*/
@@ -156,7 +179,7 @@ p {
   margin-top: 1vh;
 }
 .portrait {
-  width: 15vw;
+  width: calc(9vw + 100px);
 }
 .login-container {
   width: 400px;
@@ -172,7 +195,24 @@ p {
   border-color: var(--accent);
   color: var(--off-black);
 }
-
+@media screen and (max-width: 1100px) {
+  .main-title {
+    font-size: 10vw;
+  }
+}
+@media screen and (max-width: 700px) {
+  .portrait {
+    display: none;
+  }
+  .landing-page-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .login-container {
+    width: 80vw;
+  }
+}
 /*---------------------------------- Works Display ----------------------------------*/
 .works-grid {
   margin-top: 10vh;
@@ -188,13 +228,6 @@ p {
   /* position: relative; */
   width: calc(20vw + 600px);
   /* height: 337px; */
-}
-@media screen and (max-width: 900px) {
-  .work-container {
-    width: 100vw;
-    margin: 0px;
-    padding: 0px;
-  }
 }
 .work-thumbnail {
   width: inherit;
@@ -242,21 +275,40 @@ p {
   padding-left: 3px;
   padding-bottom: 30px;
 }
+@media screen and (max-width: 900px) {
+  .work-container {
+    width: 100vw;
+    margin: 0px;
+    padding: 0px;
+  }
+  .work-info {
+    width: 80vw;
+  }
+  .work-info-container {
+    padding-left: 10vw;
+    padding-right: 10vw;
+  }
+}
 
 /*---------------------------------- Contact Page -----------------------------------*/
 
 .faq-container {
   margin-top: 20vh;
-  width: 60vw;
+  width: 75vw;
+  max-width: 1000px;
 }
 .faq-question {
   font-size: 1.5em;
+}
+.faq-entry {
+  margin-bottom: 50px;
 }
 
 /*---------------------------------- Blog Page --------------------------------------*/
 
 .blog-container {
-  width: 60vw;
+  width: 75vw;
+  max-width: 1000px;
 
   display: grid;
   grid-template-columns: 1fr;

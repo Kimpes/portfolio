@@ -1,4 +1,4 @@
-exports.faq_entries = [
+exports.faqEntries = [
   {
     id: 0,
     question: "Who is a dumbo?",
@@ -11,7 +11,7 @@ exports.faq_entries = [
   },
 ];
 
-exports.blog_posts = [
+exports.blogPosts = [
   {
     id: 0,
     title: "This is the first thought of a Filip",
@@ -35,7 +35,7 @@ exports.blog_posts = [
   },
 ];
 
-exports.portfolio_entries = [
+exports.portfolioEntries = [
   {
     id: 0,
     title: "Skogskott",
