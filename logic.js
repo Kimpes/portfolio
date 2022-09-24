@@ -14,12 +14,19 @@ app.set("view engine", "hbs");
 
 app.use(express.static("public"));
 
-//this section handles all get requests for pages
+app.use(
+  express.urlencoded({
+    extended: false,
+  })
+);
+
+//leads to the homepage
 app.get("/", function (req, res) {
   const model = { homePage: true, pageName: "Home" };
   res.render("index.hbs", model);
 });
 
+//leads to display of portfolio
 app.get("/works", function (req, res) {
   const model = {
     entries: dummyData.portfolioEntries,
@@ -62,7 +69,26 @@ app.get("/contact/create", function (req, res) {
   res.render("contact-create.hbs");
 });
 app.post("/contact/create", function (req, res) {
-  res.redirect("/contact");
+  const question = req.body.question;
+  const answer = req.body.answer;
+
+  const errorMessages = [];
+
+  if (question && answer) {
+    dummyData.faqEntries.push({
+      id: 2,
+      question: question,
+      answer: answer,
+    });
+    res.redirect("/contact");
+  } else {
+    errorMessages.push("All fields must contain text");
+    res.render("contact-create.hbs", {
+      question: question,
+      answer: answer,
+      errorMessages,
+    });
+  }
 });
 
 app.listen(8080);
