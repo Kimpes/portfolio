@@ -18,6 +18,7 @@ app.get("/", function (req, res) {
   const model = { homePage: true, pageName: "Home" };
   res.render("index.hbs", model);
 });
+
 app.get("/works", function (req, res) {
   const model = {
     entries: dummyData.portfolioEntries,
@@ -26,6 +27,7 @@ app.get("/works", function (req, res) {
   };
   res.render("works.hbs", model);
 });
+
 app.get("/blog", function (req, res) {
   const model = {
     posts: dummyData.blogPosts,
@@ -34,6 +36,13 @@ app.get("/blog", function (req, res) {
   };
   res.render("blog.hbs", model);
 });
+app.get("/blog/create", function (req, res) {
+  res.render("blog-create.hbs");
+});
+app.post("/blog/create", function (req, res) {
+  res.redirect("/blog");
+});
+
 app.get("/contact", function (req, res) {
   const model = {
     entries: dummyData.faqEntries,
@@ -54,3 +63,15 @@ app.listen(8080);
 // - add empty states for all resources
 // - correct implementation of the date system
 // - reverse chronological order
+// - install sqlite 3
+// - db.run(sql code here)
+// - const db = new sqlite3.Database("database.db")
+// - const query = "SELECT * FROM movies"
+// - db.all(query, function(error, movies){callback function, model + render(page, model)}
+// - validate inputs: const errorMessages = []; push("this went wrong")
+// - app.post: post request, data in body, extract with function from photos
+// - use app.redirect after correct post
+// - display errors on input page
+// - in handlebars, display array strings with "this"
+// - use password = request.body.password and the others
+// - install express-session to handle logins
