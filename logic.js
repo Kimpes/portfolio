@@ -1,6 +1,7 @@
-const dummyData = require("./dummy-data");
 const express = require("express");
 const expressHandlebars = require("express-handlebars");
+const expressSession = require("express-session");
+const dummyData = require("./dummy-data");
 const app = express();
 
 app.engine(
@@ -27,6 +28,12 @@ app.get("/works", function (req, res) {
   };
   res.render("works.hbs", model);
 });
+app.get("/works/create", function (req, res) {
+  res.render("works-create.hbs");
+});
+app.post("/works/create", function (req, res) {
+  res.redirect("/works");
+});
 
 app.get("/blog", function (req, res) {
   const model = {
@@ -50,6 +57,12 @@ app.get("/contact", function (req, res) {
     pageName: "Contact",
   };
   res.render("contact.hbs", model);
+});
+app.get("/contact/create", function (req, res) {
+  res.render("contact-create.hbs");
+});
+app.post("/contact/create", function (req, res) {
+  res.redirect("/contact");
 });
 
 app.listen(8080);

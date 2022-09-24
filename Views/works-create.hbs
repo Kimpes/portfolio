@@ -1,0 +1,58 @@
+<main>
+    <div class="create-post-container">
+        <div class="post-container">
+            <form action="/works/create" method="post">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input
+                        class="form-input"
+                        type="text"
+                        name="title"
+                        placeholder="Question"
+                    />
+                </div>
+                <div class="inline-input-selector">
+                    <select class="form-select" name="tag-1">
+                        <option>Graphic Design</option>
+                        <option>Web Development</option>
+                        <option>Brand Identity</option>
+                        <option>Javascript</option>
+                        <option>HTML/CSS</option>
+                        <option>Illustration</option>
+                        <option>Music Creation</option>
+                        <option>Video Creation</option>
+                    </select>
+                    <select class="form-select" name="tag-2">
+                        <option>Graphic Design</option>
+                        <option>Web Development</option>
+                        <option>Brand Identity</option>
+                        <option>Javascript</option>
+                        <option>HTML/CSS</option>
+                        <option>Illustration</option>
+                        <option>Music Creation</option>
+                        <option>Video Creation</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Image Name</label>
+                    <input
+                        class="form-input"
+                        type="text"
+                        name="image-name"
+                        placeholder="skogskott"
+                    />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea
+                        class="form-input"
+                        type="text"
+                        name="description"
+                        placeholder="description"
+                        rows="6"
+                    ></textarea>
+                <input type="submit" value="Post" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</main>

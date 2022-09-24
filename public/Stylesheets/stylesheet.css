@@ -16,6 +16,10 @@
 .clickable {
   cursor: pointer;
 }
+.go-to-create-button {
+  position: relative;
+  bottom: 70px;
+}
 
 /*---------------------------------- Main Containers ----------------------------------*/
 body {
@@ -64,6 +68,9 @@ p {
   h1 {
     font-size: 10vw;
   }
+}
+textarea {
+  width: 100%;
 }
 
 /*---------------------------------- Navbar -------------------------------------------*/
@@ -275,6 +282,12 @@ p {
   padding-left: 3px;
   padding-bottom: 30px;
 }
+.works-go-to-create-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0vh 10vh 5vh 10vh;
+}
 @media screen and (max-width: 900px) {
   .work-container {
     width: 100vw;
@@ -313,6 +326,16 @@ p {
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 70px;
+}
+
+/*---------------------------------- Creation Pages ---------------------------------*/
+
+.inline-input-selector {
+  padding-top: 15px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  column-gap: 1.5vw;
 }
 
 /*---------------------------------- Animations -------------------------------------*/
