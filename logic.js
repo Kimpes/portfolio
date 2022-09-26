@@ -82,24 +82,44 @@ app.get("/contact/create", function (req, res) {
 app.post("/contact/create", function (req, res) {
   const question = req.body.question;
   const answer = req.body.answer;
-
   const errorMessages = [];
+  const failureModel = {
+    question,
+    answer,
+    errorMessages,
+  };
 
-  if (question && answer) {
-    dummyData.faqEntries.push({
-      id: 2,
-      question: question,
-      answer: answer,
-    });
-    res.redirect("/contact");
-  } else {
+  if (!question.length || !answer.length) {
     errorMessages.push("All fields must contain text");
-    res.render("contact-create.hbs", {
-      question: question,
-      answer: answer,
-      errorMessages,
+    res.render("contact-create.hbs", failureModel);
+  } else {
+    const query = "INSERT INTO faq_entries (question, answer) VALUES (?, ?)";
+    const values = [question, answer];
+    db.run(query, values, function (error) {
+      if (error) {
+        errorMessages.push("Internal server error");
+        res.render("contact-create.hbs", failureModel);
+      } else {
+        res.redirect("/contact");
+      }
     });
   }
+
+  // if (question && answer) {
+  //   dummyData.faqEntries.push({
+  //     id: 2,
+  //     question,
+  //     answer,
+  //   });
+  //   res.redirect("/contact");
+  // } else {
+  //   errorMessages.push("All fields must contain text");
+  //   res.render("contact-create.hbs", {
+  //     question,
+  //     answer,
+  //     errorMessages,
+  //   });
+  // }
 });
 
 app.listen(8080);
