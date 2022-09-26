@@ -6,6 +6,9 @@ const dummyData = require("./dummy-data");
 const app = express();
 const db = new sqlite3.Database("public/database.db");
 
+const ADMIN_NAME = "Kimpes";
+const ADMIN_PASSWORD = "12345";
+
 app.engine(
   "hbs",
   expressHandlebars.engine({
@@ -22,10 +25,47 @@ app.use(
   })
 );
 
+app.use(
+  expressSession({
+    saveUninitialized: false,
+    resave: false,
+    secret: "12345",
+  })
+);
+
 //leads to the homepage
 app.get("/", function (req, res) {
   const model = { homePage: true, pageName: "Home" };
   res.render("index.hbs", model);
+});
+app.post("/", function (req, res) {
+  const username = req.body.username;
+  const password = req.body.password;
+  const errorMessages = [];
+  const failureModel = {
+    username,
+    password,
+    errorMessages,
+    homePage: true,
+    pageName: "Home",
+  };
+
+  if (username != ADMIN_NAME || password != ADMIN_PASSWORD) {
+    errorMessages.push("Incorrect login information");
+  }
+
+  if (errorMessages.length) {
+    res.render("index.hbs", failureModel);
+  } else {
+    req.session.isLoggedIn = true;
+    res.redirect("/");
+  }
+});
+app.post("/logout", function (req, res) {
+  if (req.session.isLoggedIn == true) {
+    req.session.isLoggedIn = false;
+  }
+  res.redirect("/");
 });
 
 //leads to display of portfolio
@@ -46,7 +86,9 @@ app.get("/works", function (req, res) {
   });
 });
 app.get("/works/create", function (req, res) {
-  res.render("works-create.hbs");
+  if (req.session.isLoggedIn) {
+    res.render("works-create.hbs");
+  }
 });
 app.post("/works/create", function (req, res) {
   const title = req.body.title;
@@ -109,7 +151,9 @@ app.get("/blog", function (req, res) {
   });
 });
 app.get("/blog/create", function (req, res) {
-  res.render("blog-create.hbs");
+  if (req.session.isLoggedIn) {
+    res.render("blog-create.hbs");
+  }
 });
 app.post("/blog/create", function (req, res) {
   const title = req.body.title;
@@ -156,7 +200,9 @@ app.get("/contact", function (req, res) {
   });
 });
 app.get("/contact/create", function (req, res) {
-  res.render("contact-create.hbs");
+  if (req.session.isLoggedIn) {
+    res.render("contact-create.hbs");
+  }
 });
 app.post("/contact/create", function (req, res) {
   const question = req.body.question;
@@ -199,7 +245,6 @@ app.listen(8080);
 // - reverse chronological order
 // - use password = request.body.password and the others
 // - install express-session to handle logins
-// - find way of getting actual dates for database entries
 // - find a way to preselect list items in work submittion failure
 // - actually check image names instead of just hard coding one
 // - make error title disappear if no errors
