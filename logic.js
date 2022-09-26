@@ -32,6 +32,11 @@ app.get("/", function (req, res) {
 app.get("/works", function (req, res) {
   const query = "SELECT * FROM portfolio_entries";
   db.all(query, function (error, portfolio_entries) {
+    //loops through all dates and makes them readable
+    for (const entry of portfolio_entries) {
+      const postTime = new Date(entry.post_date);
+      entry.post_date = postTime.toDateString();
+    }
     const model = {
       entries: portfolio_entries,
       worksPage: true,
@@ -62,7 +67,6 @@ app.post("/works/create", function (req, res) {
   if (!title.length || !description.length || !imageName.length) {
     errorMessages.push("No fields can be left empty");
   }
-
   if (imageName != "work_skogskott" && imageName.length) {
     errorMessages.push("Image name does not exist in file system");
   }
@@ -73,9 +77,10 @@ app.post("/works/create", function (req, res) {
   if (errorMessages.length) {
     res.render("works-create.hbs", failureModel);
   } else {
+    const currentTime = new Date();
+    const postDate = currentTime.getTime();
     const query =
       "INSERT INTO portfolio_entries (title, description, post_date, tag_1, tag_2, image_name) VALUES (?, ?, ?, ?, ?, ?)";
-    const postDate = 1999999;
     const values = [title, description, postDate, tag1, tag2, imageName];
     db.run(query, values, function (error) {
       if (error) {
@@ -91,6 +96,10 @@ app.post("/works/create", function (req, res) {
 app.get("/blog", function (req, res) {
   const query = "SELECT * FROM blog_posts";
   db.all(query, function (error, blog_posts) {
+    for (const post of blog_posts) {
+      const postTime = new Date(post.post_date);
+      post.post_date = postTime.toDateString();
+    }
     const model = {
       posts: blog_posts,
       blogPage: true,
@@ -119,9 +128,10 @@ app.post("/blog/create", function (req, res) {
   if (errorMessages.length) {
     res.render("blog-create.hbs", failureModel);
   } else {
+    const currentTime = new Date();
+    const postDate = currentTime.getTime();
     const query =
       "INSERT INTO blog_posts (title, description, post_date) VALUES (?, ?, ?)";
-    const postDate = 1999999;
     const values = [title, description, postDate];
     db.run(query, values, function (error) {
       if (error) {
@@ -192,3 +202,5 @@ app.listen(8080);
 // - find way of getting actual dates for database entries
 // - find a way to preselect list items in work submittion failure
 // - actually check image names instead of just hard coding one
+// - make error title disappear if no errors
+// - add upper limit for titles & descriptions
