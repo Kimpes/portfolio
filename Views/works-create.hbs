@@ -8,11 +8,12 @@
                         class="form-input"
                         type="text"
                         name="title"
-                        placeholder="Question"
+                        placeholder="Title"
+                        value="{{title}}"
                     />
                 </div>
                 <div class="inline-input-selector">
-                    <select class="form-select" name="tag-1">
+                    <select class="form-select" name="tag1">
                         <option>Graphic Design</option>
                         <option>Web Development</option>
                         <option>Brand Identity</option>
@@ -22,7 +23,7 @@
                         <option>Music Creation</option>
                         <option>Video Creation</option>
                     </select>
-                    <select class="form-select" name="tag-2">
+                    <select class="form-select" name="tag2">
                         <option>Graphic Design</option>
                         <option>Web Development</option>
                         <option>Brand Identity</option>
@@ -38,8 +39,9 @@
                     <input
                         class="form-input"
                         type="text"
-                        name="image-name"
+                        name="imageName"
                         placeholder="skogskott"
+                        value="{{imageName}}"
                     />
                 </div>
                 <div class="form-group">
@@ -50,9 +52,19 @@
                         name="description"
                         placeholder="description"
                         rows="6"
-                    ></textarea>
+                    >{{description}}</textarea>
                 <input type="submit" value="Post" class="btn btn-primary">
             </form>
+            <div class="errors-container">
+                <h2>Error</h2>
+                <ul class="errors-list">
+                    {{#each errorMessages}}
+                        <li>
+                            {{this}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
         </div>
     </div>
 </main>

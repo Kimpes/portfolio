@@ -44,7 +44,48 @@ app.get("/works/create", function (req, res) {
   res.render("works-create.hbs");
 });
 app.post("/works/create", function (req, res) {
-  res.redirect("/works");
+  const title = req.body.title;
+  const description = req.body.description;
+  const tag1 = req.body.tag1;
+  const tag2 = req.body.tag2;
+  const imageName = req.body.imageName;
+  const errorMessages = [];
+  const failureModel = {
+    title,
+    description,
+    tag1,
+    tag2,
+    imageName,
+    errorMessages,
+  };
+
+  if (!title.length || !description.length || !imageName.length) {
+    errorMessages.push("No fields can be left empty");
+  }
+
+  if (imageName != "work_skogskott" && imageName.length) {
+    errorMessages.push("Image name does not exist in file system");
+  }
+  if (tag1 == tag2) {
+    errorMessages.push("Both tags cannot be the same");
+  }
+
+  if (errorMessages.length) {
+    res.render("works-create.hbs", failureModel);
+  } else {
+    const query =
+      "INSERT INTO portfolio_entries (title, description, post_date, tag_1, tag_2, image_name) VALUES (?, ?, ?, ?, ?, ?)";
+    const postDate = 1999999;
+    const values = [title, description, postDate, tag1, tag2, imageName];
+    db.run(query, values, function (error) {
+      if (error) {
+        errorMessages.push(error);
+        res.render("works-create.hbs", failureModel);
+      } else {
+        res.redirect("/works");
+      }
+    });
+  }
 });
 
 app.get("/blog", function (req, res) {
@@ -62,7 +103,35 @@ app.get("/blog/create", function (req, res) {
   res.render("blog-create.hbs");
 });
 app.post("/blog/create", function (req, res) {
-  res.redirect("/blog");
+  const title = req.body.title;
+  const description = req.body.description;
+  const errorMessages = [];
+  const failureModel = {
+    title,
+    description,
+    errorMessages,
+  };
+
+  if (!title.length || !description.length) {
+    errorMessages.push("All fields must contain text");
+  }
+
+  if (errorMessages.length) {
+    res.render("blog-create.hbs", failureModel);
+  } else {
+    const query =
+      "INSERT INTO blog_posts (title, description, post_date) VALUES (?, ?, ?)";
+    const postDate = 1999999;
+    const values = [title, description, postDate];
+    db.run(query, values, function (error) {
+      if (error) {
+        errorMessages.push("Internal server error");
+        res.render("blog-create.hbs", failureModel);
+      } else {
+        res.redirect("/blog");
+      }
+    });
+  }
 });
 
 app.get("/contact", function (req, res) {
@@ -91,6 +160,9 @@ app.post("/contact/create", function (req, res) {
 
   if (!question.length || !answer.length) {
     errorMessages.push("All fields must contain text");
+  }
+
+  if (errorMessages.length) {
     res.render("contact-create.hbs", failureModel);
   } else {
     const query = "INSERT INTO faq_entries (question, answer) VALUES (?, ?)";
@@ -104,22 +176,6 @@ app.post("/contact/create", function (req, res) {
       }
     });
   }
-
-  // if (question && answer) {
-  //   dummyData.faqEntries.push({
-  //     id: 2,
-  //     question,
-  //     answer,
-  //   });
-  //   res.redirect("/contact");
-  // } else {
-  //   errorMessages.push("All fields must contain text");
-  //   res.render("contact-create.hbs", {
-  //     question,
-  //     answer,
-  //     errorMessages,
-  //   });
-  // }
 });
 
 app.listen(8080);
@@ -127,21 +183,12 @@ app.listen(8080);
 
 // app.get ('/mainpage', function (req, res){}) is a middlewear
 
-//app.engine('hbs', expressHandlebars({ extname: ".hbs"; })) something like that.
-
 //TODO:
 // - add empty states for all resources
 // - correct implementation of the date system
 // - reverse chronological order
-// - install sqlite 3
-// - db.run(sql code here)
-// - const db = new sqlite3.Database("database.db")
-// - const query = "SELECT * FROM movies"
-// - db.all(query, function(error, movies){callback function, model + render(page, model)}
-// - validate inputs: const errorMessages = []; push("this went wrong")
-// - app.post: post request, data in body, extract with function from photos
-// - use app.redirect after correct post
-// - display errors on input page
-// - in handlebars, display array strings with "this"
 // - use password = request.body.password and the others
 // - install express-session to handle logins
+// - find way of getting actual dates for database entries
+// - find a way to preselect list items in work submittion failure
+// - actually check image names instead of just hard coding one

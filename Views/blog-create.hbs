@@ -9,6 +9,7 @@
                         type="text"
                         name="title"
                         placeholder="Title"
+                        value="{{title}}"
                     />
                 </div>
                 <div class="form-group">
@@ -17,11 +18,21 @@
                         class="form-input"
                         type="text"
                         name="description"
-                        placeholder=""
+                        placeholder="Description"
                         rows="5"
-                    ></textarea>
+                    >{{description}}</textarea>
                 <input type="submit" value="Post" class="btn btn-primary">
             </form>
+            <div class="errors-container">
+                <h2>Error</h2>
+                <ul class="errors-list">
+                    {{#each errorMessages}}
+                        <li>
+                            {{this}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </div>
         </div>
     </div>
 </main>
