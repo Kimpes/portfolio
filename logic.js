@@ -1,8 +1,10 @@
 const express = require("express");
 const expressHandlebars = require("express-handlebars");
 const expressSession = require("express-session");
+const sqlite3 = require("sqlite3");
 const dummyData = require("./dummy-data");
 const app = express();
+const db = new sqlite3.Database("public/database.db");
 
 app.engine(
   "hbs",
@@ -28,12 +30,15 @@ app.get("/", function (req, res) {
 
 //leads to display of portfolio
 app.get("/works", function (req, res) {
-  const model = {
-    entries: dummyData.portfolioEntries,
-    worksPage: true,
-    pageName: "Portfolio",
-  };
-  res.render("works.hbs", model);
+  const query = "SELECT * FROM portfolio_entries";
+  db.all(query, function (error, portfolio_entries) {
+    const model = {
+      entries: portfolio_entries,
+      worksPage: true,
+      pageName: "Portfolio",
+    };
+    res.render("works.hbs", model);
+  });
 });
 app.get("/works/create", function (req, res) {
   res.render("works-create.hbs");
@@ -43,12 +48,15 @@ app.post("/works/create", function (req, res) {
 });
 
 app.get("/blog", function (req, res) {
-  const model = {
-    posts: dummyData.blogPosts,
-    blogPage: true,
-    pageName: "Blog",
-  };
-  res.render("blog.hbs", model);
+  const query = "SELECT * FROM blog_posts";
+  db.all(query, function (error, blog_posts) {
+    const model = {
+      posts: blog_posts,
+      blogPage: true,
+      pageName: "Blog",
+    };
+    res.render("blog.hbs", model);
+  });
 });
 app.get("/blog/create", function (req, res) {
   res.render("blog-create.hbs");
@@ -58,12 +66,15 @@ app.post("/blog/create", function (req, res) {
 });
 
 app.get("/contact", function (req, res) {
-  const model = {
-    entries: dummyData.faqEntries,
-    contactPage: true,
-    pageName: "Contact",
-  };
-  res.render("contact.hbs", model);
+  const query = "SELECT * FROM faq_entries";
+  db.all(query, function (error, faq_entries) {
+    const model = {
+      entries: faq_entries,
+      contactPage: true,
+      pageName: "Contact",
+    };
+    res.render("contact.hbs", model);
+  });
 });
 app.get("/contact/create", function (req, res) {
   res.render("contact-create.hbs");
