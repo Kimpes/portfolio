@@ -218,6 +218,105 @@ app.post("/blog/create", function (req, res) {
     });
   }
 });
+app.get("/blog/edit/:id", function (req, res) {
+  if (!req.session.isLoggedIn) {
+    res.redirect("/blog");
+  } else {
+    const id = req.params.id;
+    const errorMessages = [];
+    const failureModel = {
+      errorMessages,
+    };
+    const query = "SELECT * FROM blog_posts WHERE blogID = ? ";
+
+    db.get(query, [id], function (error, entry) {
+      if (error) {
+        errorMessages.push("Internal server error");
+        res.render("blog-create.hbs", failureModel);
+      } else {
+        const model = {
+          title: entry.title,
+          description: entry.description,
+          id, //if there's a specific id sent, it's in edit mode and not create mode
+        };
+        res.render("blog-create.hbs", model);
+      }
+    });
+  }
+});
+app.post("/blog/edit/:id", function (req, res) {
+  if (!req.session.isLoggedIn) {
+    res.redirect("/blog");
+  } else {
+    const id = req.params.id;
+    const title = req.body.title;
+    const description = req.body.description;
+    const errorMessages = [];
+    const failureModel = {
+      id,
+      title,
+      description,
+      errorMessages,
+    };
+
+    if (!title.length || !description.length) {
+      errorMessages.push("All fields must contain text");
+    }
+    if (title.length > MAX_TITLE_LENGTH) {
+      errorMessages.push(
+        "Title cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+      );
+    }
+    if (description.length > MAX_DESCRIPTION_LENGTH) {
+      errorMessages.push(
+        "Description cannot be longer than " +
+          MAX_DESCRIPTION_LENGTH +
+          " characters"
+      );
+    }
+
+    if (errorMessages.length) {
+      res.render("blog-create.hbs", failureModel);
+    } else {
+      const query =
+        "UPDATE blog_posts SET title = ?, description = ? WHERE blogID = ?";
+      const values = [title, description, id];
+      db.run(query, values, function (error) {
+        if (error) {
+          errorMessages.push("Internal server error");
+          res.render("blog-create.hbs", failureModel);
+        } else {
+          res.redirect("/blog");
+        }
+      });
+    }
+  }
+});
+app.post("/blog/delete/:id", function (req, res) {
+  if (!req.session.isLoggedIn) {
+    res.redirect("/blog");
+  } else {
+    const id = req.params.id;
+    const title = req.body.title;
+    const description = req.body.description;
+    const errorMessages = [];
+    const failureModel = {
+      id,
+      title,
+      description,
+      errorMessages,
+    };
+    const query = "DELETE FROM blog_posts WHERE blogID = ?";
+    db.run(query, [id], function (error) {
+      if (error) {
+        errorMessages.push("Internal server error");
+        res.render("blog-create.hbs", failureModel);
+      } else {
+        res.redirect("/blog");
+      }
+    });
+  }
+});
 
 app.get("/contact", function (req, res) {
   const query = "SELECT * FROM faq_entries";

@@ -14,6 +14,9 @@
           <h2>{{title}}</h2>
           <p>{{description}}</p>
           <span>Filip Gustafsson | {{post_date}}</span>
+          {{#if ../session.isLoggedIn}}
+            <a href="/blog/edit/{{blogID}}" class="edit-button">Edit</a>
+          {{/if}}
         </div>
       {{/each}}
     </div>

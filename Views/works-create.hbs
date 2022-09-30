@@ -1,7 +1,7 @@
 <main>
     <div class="create-post-container">
         <div class="post-container">
-            <form action="/works/create" method="post">
+            <form action="{{#if id}}/works/edit/{{id}}{{else}}/works/create{{/if}}" method="post">
                 <div class="form-group">
                     <label class="form-label">Title</label>
                     <input
@@ -53,8 +53,15 @@
                         placeholder="description"
                         rows="6"
                     >{{description}}</textarea>
-                <input type="submit" value="Post" class="btn btn-primary">
+                <input type="submit" value="{{#if id}}Update{{else}}Post{{/if}}" class="btn btn-primary">
             </form>
+            {{#if id}}
+                <a href="/contact" class="btn btn-primary">Cancel</a>
+                {{!-- I couldn't get method="delete" to work, so i made a post middlewear with the path /contact/delete/ instead --}}
+                <form action="/contact/delete/{{id}}" method="post">
+                    <input type="submit" value="Delete" class="btn btn-primary deletion">
+                </form>
+            {{/if}}
             {{#if errorMessages.length}}
                 <div class="errors-container">
                     <h2>Error</h2>
