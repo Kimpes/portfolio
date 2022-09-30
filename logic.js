@@ -301,38 +301,67 @@ app.get("/contact/edit/:id", function (req, res) {
   }
 });
 app.post("/contact/edit/:id", function (req, res) {
-  const id = req.params.id;
-  const question = req.body.question;
-  const answer = req.body.answer;
-  const errorMessages = [];
-  const failureModel = {
-    id,
-    question,
-    answer,
-    errorMessages,
-  };
-
-  if (!question.length || !answer.length) {
-    errorMessages.push("All fields must contain text");
-  }
-  if (question.length > MAX_TITLE_LENGTH) {
-    errorMessages.push(
-      "Question cannot be longer than " + MAX_TITLE_LENGTH + " characters"
-    );
-  }
-  if (answer.length > MAX_DESCRIPTION_LENGTH) {
-    errorMessages.push(
-      "Answer cannot be longer than " + MAX_DESCRIPTION_LENGTH + " characters"
-    );
-  }
-
-  if (errorMessages.length) {
-    res.render("contact-create.hbs", failureModel);
+  if (!req.session.isLoggedIn) {
+    res.redirect("/contact");
   } else {
-    const query =
-      "UPDATE faq_entries SET question = ?, answer = ? WHERE faqID = ? ";
-    const values = [question, answer, id];
-    db.run(query, values, function (error) {
+    const id = req.params.id;
+    const question = req.body.question;
+    const answer = req.body.answer;
+    const errorMessages = [];
+    const failureModel = {
+      id,
+      question,
+      answer,
+      errorMessages,
+    };
+
+    if (!question.length || !answer.length) {
+      errorMessages.push("All fields must contain text");
+    }
+    if (question.length > MAX_TITLE_LENGTH) {
+      errorMessages.push(
+        "Question cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+      );
+    }
+    if (answer.length > MAX_DESCRIPTION_LENGTH) {
+      errorMessages.push(
+        "Answer cannot be longer than " + MAX_DESCRIPTION_LENGTH + " characters"
+      );
+    }
+
+    if (errorMessages.length) {
+      res.render("contact-create.hbs", failureModel);
+    } else {
+      const query =
+        "UPDATE faq_entries SET question = ?, answer = ? WHERE faqID = ? ";
+      const values = [question, answer, id];
+      db.run(query, values, function (error) {
+        if (error) {
+          errorMessages.push("Internal server error");
+          res.render("contact-create.hbs", failureModel);
+        } else {
+          res.redirect("/contact");
+        }
+      });
+    }
+  }
+});
+app.post("/contact/delete/:id", function (req, res) {
+  if (!req.session.isLoggedIn) {
+    res.redirect("/contact");
+  } else {
+    const id = req.params.id;
+    const question = req.body.question;
+    const answer = req.body.answer;
+    const errorMessages = [];
+    const failureModel = {
+      id,
+      question,
+      answer,
+      errorMessages,
+    };
+    const query = "DELETE FROM faq_entries WHERE faqID = ?";
+    db.run(query, [id], function (error) {
       if (error) {
         errorMessages.push("Internal server error");
         res.render("contact-create.hbs", failureModel);
