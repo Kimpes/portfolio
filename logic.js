@@ -275,21 +275,73 @@ app.post("/contact/create", function (req, res) {
   }
 });
 app.get("/contact/edit/:id", function (req, res) {
-  if (req.session.isLoggedIn) {
+  if (!req.session.isLoggedIn) {
     res.redirect("/contact");
+  } else {
+    const id = req.params.id;
+    const errorMessages = [];
+    const failureModel = {
+      errorMessages,
+    };
+    const query = "SELECT * FROM faq_entries WHERE faqID = ? ";
+
+    db.get(query, [id], function (error, entry) {
+      if (error) {
+        errorMessages.push("Internal server error");
+        res.render("contact-create.hbs", failureModel);
+      } else {
+        const model = {
+          question: entry.question,
+          answer: entry.answer,
+          id, //if there's a specific id sent, it's in edit mode and not create mode
+        };
+        res.render("contact-create.hbs", model);
+      }
+    });
+  }
+});
+app.post("/contact/edit/:id", function (req, res) {
+  const id = req.params.id;
+  const question = req.body.question;
+  const answer = req.body.answer;
+  const errorMessages = [];
+  const failureModel = {
+    id,
+    question,
+    answer,
+    errorMessages,
+  };
+
+  if (!question.length || !answer.length) {
+    errorMessages.push("All fields must contain text");
+  }
+  if (question.length > MAX_TITLE_LENGTH) {
+    errorMessages.push(
+      "Question cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+    );
+  }
+  if (answer.length > MAX_DESCRIPTION_LENGTH) {
+    errorMessages.push(
+      "Answer cannot be longer than " + MAX_DESCRIPTION_LENGTH + " characters"
+    );
   }
 
-  const id = req.params.id;
-  //this needs to be a db query instead.
-  // const entry = faq_entries.find((q) => q.faqID == id);
-  const model = {
-    question: "entry.question",
-    answer: "entry.answer",
-    id, //if there's a specific id sent, it's in edit mode and not create mode
-  };
-  res.render("contact-create.hbs", model);
+  if (errorMessages.length) {
+    res.render("contact-create.hbs", failureModel);
+  } else {
+    const query =
+      "UPDATE faq_entries SET question = ?, answer = ? WHERE faqID = ? ";
+    const values = [question, answer, id];
+    db.run(query, values, function (error) {
+      if (error) {
+        errorMessages.push("Internal server error");
+        res.render("contact-create.hbs", failureModel);
+      } else {
+        res.redirect("/contact");
+      }
+    });
+  }
 });
-app.post("contact/edit/:id", function (req, res) {});
 
 app.listen(8080);
 //change to 80 later (supposedly the standard)
