@@ -55,16 +55,18 @@
                     >{{description}}</textarea>
                 <input type="submit" value="Post" class="btn btn-primary">
             </form>
-            <div class="errors-container">
-                <h2>Error</h2>
-                <ul class="errors-list">
-                    {{#each errorMessages}}
-                        <li>
-                            {{this}}
-                        </li>
-                    {{/each}}
-                </ul>
-            </div>
+            {{#if errorMessages.length}}
+                <div class="errors-container">
+                    <h2>Error</h2>
+                    <ul class="errors-list">
+                        {{#each errorMessages}}
+                            <li>
+                                {{this}}
+                            </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            {{/if}}
         </div>
     </div>
 </main>

@@ -18,35 +18,39 @@
 </main>
 {{{body}}}
 <footer>
-  <h2>Are you me?</h2>
-  <div class="login-container">
-    <form action="/" method="post">
-      <div class="form-group">
-        <label class="form-label">Username</label>
-        <input
-          class="form-input"
-          type="text"
-          placeholder="Username"
-          name="username"
-          value="{{username}}"
-        />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input
-          class="form-input"
-          type="password"
-          placeholder="Password"
-          name="password"
-          value="{{password}}"
-        />
-      </div>
-      <input type="submit" value="Log in" class="btn btn-primary" />
-    </form>
+  {{#if session.isLoggedIn}}
+    <h2>Welcome back, Filip!</h2>
     <form action="/logout" method="post">
       <input type="submit" value="Log out" class="btn btn-primary" />
     </form>
-  </div>
+  {{else}}
+    <h2>Are you me?</h2>
+    <div class="login-container">
+      <form action="/" method="post">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input
+            class="form-input"
+            type="text"
+            placeholder="Username"
+            name="username"
+            value="{{username}}"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input
+            class="form-input"
+            type="password"
+            placeholder="Password"
+            name="password"
+            value="{{password}}"
+          />
+        </div>
+        <input type="submit" value="Log in" class="btn btn-primary" />
+      </form>
+    </div>
+  {{/if}}
   {{#each errorMessages}}
     <li>
       {{this}}

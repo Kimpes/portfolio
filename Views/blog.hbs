@@ -1,17 +1,23 @@
 <main>
   <h1>What's up?</h1>
-  <div class="go-to-create-button"><a
-      href="/blog/create"
-      class="btn btn-primary"
-    >Create New Post</a>
-  </div>
-  <div class="blog-container">
-    {{#each posts}}
-      <div class="blog-entry">
-        <h2>{{title}}</h2>
-        <p>{{description}}</p>
-        <span>Filip Gustafsson | {{post_date}}</span>
-      </div>
-    {{/each}}
-  </div>
+  {{#if session.isLoggedIn}}
+    <div class="go-to-create-button"><a
+        href="/blog/create"
+        class="btn btn-primary"
+      >Create New Post</a>
+    </div>
+  {{/if}}
+  {{#if posts.length}}
+    <div class="blog-container">
+      {{#each posts}}
+        <div class="blog-entry">
+          <h2>{{title}}</h2>
+          <p>{{description}}</p>
+          <span>Filip Gustafsson | {{post_date}}</span>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <h2>Oops, no blog posts to show</h2>
+  {{/if}}
 </main>

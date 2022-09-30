@@ -1,26 +1,25 @@
 <main>
     <div class="create-post-container">
         <div class="post-container">
-            <form action="/blog/create" method="post">
+            <form action="/contact/create" method="post">
                 <div class="form-group">
-                    <label class="form-label">Title</label>
+                    <label class="form-label">Question</label>
                     <input
                         class="form-input"
                         type="text"
-                        name="title"
-                        placeholder="Title"
-                        value="{{title}}"
+                        name="question"
+                        placeholder="Question"
+                        value="{{question}}"
                     />
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Description</label>
+                    <label class="form-label">Answer</label>
                     <textarea
                         class="form-input"
                         type="text"
-                        name="description"
-                        placeholder="Description"
-                        rows="5"
-                    >{{description}}</textarea>
+                        name="answer"
+                        placeholder="Answer"
+                    >{{answer}}</textarea>
                 <input type="submit" value="Post" class="btn btn-primary">
             </form>
             {{#if errorMessages.length}}

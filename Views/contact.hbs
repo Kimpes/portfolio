@@ -4,16 +4,26 @@
     <h2>gustafssonfilip@hotmail.com</h2>
   </div>
   <div class="faq-container">
-    <div class="go-to-create-button"><a
-        href="/contact/create"
-        class="btn btn-primary"
-      >Create New Post</a>
-    </div>
-    {{#each entries}}
-      <div class="faq-entry">
-        <p class="faq-question">{{question}}</p>
-        <p>{{answer}}</p>
+    <h1>FAQ</h1>
+    {{#if session.isLoggedIn}}
+      <div class="go-to-create-button"><a
+          href="/contact/create"
+          class="btn btn-primary"
+        >Create New Post</a>
       </div>
-    {{/each}}
+    {{/if}}
+    {{#if entries.length}}
+      {{#each entries}}
+        <div class="faq-entry">
+          <p class="faq-question">{{question}}</p>
+          <p>{{answer}}</p>
+          {{#if ../session.isLoggedIn}}
+            <a href="/contact/edit/{{faqID}}" class="edit-button">Edit</a>
+          {{/if}}
+        </div>
+      {{/each}}
+    {{else}}
+      <h2>Oops, no FAQ entries to show</h2>
+    {{/if}}
   </div>
 </main>

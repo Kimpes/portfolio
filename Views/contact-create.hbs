@@ -1,7 +1,8 @@
 <main>
     <div class="create-post-container">
         <div class="post-container">
-            <form action="/contact/create" method="post">
+            {{!-- if there's a specific id sent, it's in edit mode and not create mode --}}
+            <form action="{{#if id}}/contact/edit/{{id}}{{else}}/contact/create{{/if}}" method="post">
                 <div class="form-group">
                     <label class="form-label">Question</label>
                     <input
@@ -20,18 +21,20 @@
                         name="answer"
                         placeholder="Answer"
                     >{{answer}}</textarea>
-                <input type="submit" value="Post" class="btn btn-primary">
+                <input type="submit" value="{{#if id}}Update{{else}}Post{{/if}}" class="btn btn-primary">
             </form>
-            <div class="errors-container">
-                <h2>Error</h2>
-                <ul class="errors-list">
-                    {{#each errorMessages}}
-                        <li>
-                            {{this}}
-                        </li>
-                    {{/each}}
-                </ul>
-            </div>
+            {{#if errorMessages.length}}
+                <div class="errors-container">
+                    <h2>Error</h2>
+                    <ul class="errors-list">
+                        {{#each errorMessages}}
+                            <li>
+                                {{this}}
+                            </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            {{/if}}
         </div>
     </div>
 </main>

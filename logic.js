@@ -7,7 +7,9 @@ const app = express();
 const db = new sqlite3.Database("public/database.db");
 
 const ADMIN_NAME = "Kimpes";
-const ADMIN_PASSWORD = "12345";
+const ADMIN_PASSWORD = "123";
+const MAX_TITLE_LENGTH = 256;
+const MAX_DESCRIPTION_LENGTH = 1024;
 
 app.engine(
   "hbs",
@@ -29,9 +31,14 @@ app.use(
   expressSession({
     saveUninitialized: false,
     resave: false,
-    secret: "12345",
+    secret: "FunkyBananasDancingWithSpears700",
   })
 );
+
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
 
 //leads to the homepage
 app.get("/", function (req, res) {
@@ -109,6 +116,18 @@ app.post("/works/create", function (req, res) {
   if (!title.length || !description.length || !imageName.length) {
     errorMessages.push("No fields can be left empty");
   }
+  if (title.length > MAX_TITLE_LENGTH) {
+    errorMessages.push(
+      "Title cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+    );
+  }
+  if (title.length > MAX_DESCRIPTION_LENGTH) {
+    errorMessages.push(
+      "Description cannot be longer than " +
+        MAX_DESCRIPTION_LENGTH +
+        " characters"
+    );
+  }
   if (imageName != "work_skogskott" && imageName.length) {
     errorMessages.push("Image name does not exist in file system");
   }
@@ -168,6 +187,18 @@ app.post("/blog/create", function (req, res) {
   if (!title.length || !description.length) {
     errorMessages.push("All fields must contain text");
   }
+  if (title.length > MAX_TITLE_LENGTH) {
+    errorMessages.push(
+      "Title cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+    );
+  }
+  if (title.length > MAX_DESCRIPTION_LENGTH) {
+    errorMessages.push(
+      "Description cannot be longer than " +
+        MAX_DESCRIPTION_LENGTH +
+        " characters"
+    );
+  }
 
   if (errorMessages.length) {
     res.render("blog-create.hbs", failureModel);
@@ -217,6 +248,16 @@ app.post("/contact/create", function (req, res) {
   if (!question.length || !answer.length) {
     errorMessages.push("All fields must contain text");
   }
+  if (question.length > MAX_TITLE_LENGTH) {
+    errorMessages.push(
+      "Question cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+    );
+  }
+  if (answer.length > MAX_DESCRIPTION_LENGTH) {
+    errorMessages.push(
+      "Answer cannot be longer than " + MAX_DESCRIPTION_LENGTH + " characters"
+    );
+  }
 
   if (errorMessages.length) {
     res.render("contact-create.hbs", failureModel);
@@ -233,6 +274,22 @@ app.post("/contact/create", function (req, res) {
     });
   }
 });
+app.get("/contact/edit/:id", function (req, res) {
+  if (req.session.isLoggedIn) {
+    res.redirect("/contact");
+  }
+
+  const id = req.params.id;
+  //this needs to be a db query instead.
+  // const entry = faq_entries.find((q) => q.faqID == id);
+  const model = {
+    question: "entry.question",
+    answer: "entry.answer",
+    id, //if there's a specific id sent, it's in edit mode and not create mode
+  };
+  res.render("contact-create.hbs", model);
+});
+app.post("contact/edit/:id", function (req, res) {});
 
 app.listen(8080);
 //change to 80 later (supposedly the standard)
@@ -240,12 +297,13 @@ app.listen(8080);
 // app.get ('/mainpage', function (req, res){}) is a middlewear
 
 //TODO:
-// - add empty states for all resources
-// - correct implementation of the date system
 // - reverse chronological order
-// - use password = request.body.password and the others
-// - install express-session to handle logins
 // - find a way to preselect list items in work submittion failure
 // - actually check image names instead of just hard coding one
-// - make error title disappear if no errors
-// - add upper limit for titles & descriptions
+// - be able to remove posts
+// - be able to update posts
+// - add cancel and delete buttons to contact edit page
+
+// - Add pagination
+// - Add search engine
+// - Add image upload

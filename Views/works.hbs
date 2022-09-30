@@ -2,24 +2,30 @@
 
   <div class="works-grid">
 
-    <div class="works-go-to-create-button"><a
-        href="/works/create"
-        class="btn btn-primary"
-      >Create New Post</a>
-    </div>
-    {{#each entries}}
-      <div class="work-container has-shadow">
-        <img src="/images/{{image_name}}.png" alt="" class="work-thumbnail" />
-        <div class="work-info-container">
-          <h1 class="work-title">{{title}}</h1>
-          <div class="work-tags-container">
-            <p class="work-tags">{{tag_1}}</p>
-            <p class="work-tags">{{tag_2}}</p>
-          </div>
-          <p class="work-info">{{description}}</p>
-          <p class="work-date">{{post_date}}</p>
-        </div>
+    {{#if session.isLoggedIn}}
+      <div class="works-go-to-create-button"><a
+          href="/works/create"
+          class="btn btn-primary"
+        >Create New Post</a>
       </div>
-    {{/each}}
+    {{/if}}
+    {{#if entries.length}}
+      {{#each entries}}
+        <div class="work-container has-shadow">
+          <img src="/images/{{image_name}}.png" alt="" class="work-thumbnail" />
+          <div class="work-info-container">
+            <h1 class="work-title">{{title}}</h1>
+            <div class="work-tags-container">
+              <p class="work-tags">{{tag_1}}</p>
+              <p class="work-tags">{{tag_2}}</p>
+            </div>
+            <p class="work-info">{{description}}</p>
+            <p class="work-date">{{post_date}}</p>
+          </div>
+        </div>
+      {{/each}}
+    {{else}}
+      <h2>Oops, no portfolio works to show</h2>
+    {{/if}}
   </div>
 </section>
