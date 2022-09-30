@@ -153,6 +153,120 @@ app.post("/works/create", function (req, res) {
     });
   }
 });
+app.get("/works/edit/:id", function (req, res) {
+  if (!req.session.isLoggedIn) {
+    res.redirect("/works");
+  } else {
+    const id = req.params.id;
+    const errorMessages = [];
+    const failureModel = {
+      errorMessages,
+    };
+    const query = "SELECT * FROM portfolio_entries WHERE portfolioID = ? ";
+
+    db.get(query, [id], function (error, entry) {
+      if (error) {
+        errorMessages.push("Internal server error");
+        res.render("works-create.hbs", failureModel);
+      } else {
+        const model = {
+          title: entry.title,
+          description: entry.description,
+          imageName: entry.image_name,
+          id,
+        };
+        res.render("works-create.hbs", model);
+      }
+    });
+  }
+});
+app.post("/works/edit/:id", function (req, res) {
+  if (!req.session.isLoggedIn) {
+    res.redirect("/blog");
+  } else {
+    const id = req.params.id;
+    const title = req.body.title;
+    const description = req.body.description;
+    const tag1 = req.body.tag1;
+    const tag2 = req.body.tag2;
+    const imageName = req.body.imageName;
+    const errorMessages = [];
+    const failureModel = {
+      id,
+      title,
+      description,
+      tag1,
+      tag2,
+      imageName,
+      errorMessages,
+    };
+
+    if (!title.length || !description.length || !imageName.length) {
+      errorMessages.push("No fields can be left empty");
+    }
+    if (title.length > MAX_TITLE_LENGTH) {
+      errorMessages.push(
+        "Title cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+      );
+    }
+    if (title.length > MAX_DESCRIPTION_LENGTH) {
+      errorMessages.push(
+        "Description cannot be longer than " +
+          MAX_DESCRIPTION_LENGTH +
+          " characters"
+      );
+    }
+    if (imageName != "work_skogskott" && imageName.length) {
+      errorMessages.push("Image name does not exist in file system");
+    }
+    if (tag1 == tag2) {
+      errorMessages.push("Both tags cannot be the same");
+    }
+
+    if (errorMessages.length) {
+      res.render("works-create.hbs", failureModel);
+    } else {
+      const query =
+        "UPDATE portfolio_entries SET title = ?, description = ?, tag_1 = ?, tag_2 = ?, image_name = ? WHERE portfolioID = ?";
+      const values = [title, description, tag1, tag2, imageName, id];
+      db.run(query, values, function (error) {
+        if (error) {
+          errorMessages.push("Internal server error");
+          res.render("works-create.hbs", failureModel);
+        } else {
+          res.redirect("/works");
+        }
+      });
+    }
+  }
+});
+app.post("/works/delete/:id", function (req, res) {
+  if (!req.session.isLoggedIn) {
+    res.redirect("/works");
+  } else {
+    const id = req.params.id;
+    const title = req.body.title;
+    const description = req.body.description;
+    const imageName = req.body.image_name;
+    const errorMessages = [];
+    const failureModel = {
+      id,
+      title,
+      description,
+      imageName,
+      errorMessages,
+    };
+    const query = "DELETE FROM portfolio_entries WHERE portfolioID = ?";
+    db.run(query, [id], function (error) {
+      if (error) {
+        errorMessages.push("Internal server error");
+        res.render("works-create.hbs", failureModel);
+      } else {
+        res.redirect("/works");
+      }
+    });
+  }
+});
 
 app.get("/blog", function (req, res) {
   const query = "SELECT * FROM blog_posts";

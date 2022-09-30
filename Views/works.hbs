@@ -21,6 +21,9 @@
             </div>
             <p class="work-info">{{description}}</p>
             <p class="work-date">{{post_date}}</p>
+            {{#if ../session.isLoggedIn}}
+              <a href="/works/edit/{{portfolioID}}" class="edit-button">Edit</a>
+            {{/if}}
           </div>
         </div>
       {{/each}}

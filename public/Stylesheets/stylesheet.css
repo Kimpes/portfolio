@@ -233,6 +233,7 @@ textarea {
 /*---------------------------------- Works Display ----------------------------------*/
 .works-grid {
   margin-top: 10vh;
+  margin-bottom: 10vh;
   display: grid;
   grid-template-columns: auto;
   /* grid-template-columns: repeat(auto-fill, minmax(800px, 0px)); */

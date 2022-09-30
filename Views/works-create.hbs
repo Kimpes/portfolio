@@ -56,9 +56,9 @@
                 <input type="submit" value="{{#if id}}Update{{else}}Post{{/if}}" class="btn btn-primary">
             </form>
             {{#if id}}
-                <a href="/contact" class="btn btn-primary">Cancel</a>
+                <a href="/works" class="btn btn-primary">Cancel</a>
                 {{!-- I couldn't get method="delete" to work, so i made a post middlewear with the path /contact/delete/ instead --}}
-                <form action="/contact/delete/{{id}}" method="post">
+                <form action="/works/delete/{{id}}" method="post">
                     <input type="submit" value="Delete" class="btn btn-primary deletion">
                 </form>
             {{/if}}
