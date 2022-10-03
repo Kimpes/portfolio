@@ -2,7 +2,6 @@ const express = require("express");
 const expressHandlebars = require("express-handlebars");
 const expressSession = require("express-session");
 const sqlite3 = require("sqlite3");
-const dummyData = require("./dummy-data");
 const app = express();
 const db = new sqlite3.Database("public/database.db");
 
@@ -10,6 +9,9 @@ const ADMIN_NAME = "Kimpes";
 const ADMIN_PASSWORD = "123";
 const MAX_TITLE_LENGTH = 256;
 const MAX_DESCRIPTION_LENGTH = 1024;
+const FAQ_ENTRIES_PER_PAGE = 5;
+const BLOG_POSTS_PER_PAGE = 2;
+const WORK_ENTRIES_PER_PAGE = 2;
 
 app.engine(
   "hbs",
@@ -84,10 +86,34 @@ app.get("/works", function (req, res) {
       const postTime = new Date(entry.post_date);
       entry.post_date = postTime.toDateString();
     }
+    portfolio_entries = portfolio_entries.reverse();
+    const currentPageNr = parseInt(req.query.page) || 1;
+    let currentPageEntries = [];
+
+    const pageInfo = RetrievePageInfo(
+      currentPageNr,
+      portfolio_entries,
+      WORK_ENTRIES_PER_PAGE
+    );
+
+    for (let i = 0; i < WORK_ENTRIES_PER_PAGE; i++) {
+      if (
+        portfolio_entries[
+          i + (pageInfo.currentPageNr - 1) * WORK_ENTRIES_PER_PAGE
+        ]
+      ) {
+        currentPageEntries.push(
+          portfolio_entries[
+            i + (pageInfo.currentPageNr - 1) * WORK_ENTRIES_PER_PAGE
+          ]
+        ); //page 2 has index 1
+      }
+    }
     const model = {
-      entries: portfolio_entries,
+      currentPageEntries,
       worksPage: true,
       pageName: "Portfolio",
+      pageInfo,
     };
     res.render("works.hbs", model);
   });
@@ -275,10 +301,28 @@ app.get("/blog", function (req, res) {
       const postTime = new Date(post.post_date);
       post.post_date = postTime.toDateString();
     }
+    blog_posts = blog_posts.reverse();
+    const currentPageNr = parseInt(req.query.page) || 1;
+    let currentPageEntries = [];
+
+    const pageInfo = RetrievePageInfo(
+      currentPageNr,
+      blog_posts,
+      BLOG_POSTS_PER_PAGE
+    );
+
+    for (let i = 0; i < BLOG_POSTS_PER_PAGE; i++) {
+      if (blog_posts[i + (pageInfo.currentPageNr - 1) * BLOG_POSTS_PER_PAGE]) {
+        currentPageEntries.push(
+          blog_posts[i + (pageInfo.currentPageNr - 1) * BLOG_POSTS_PER_PAGE]
+        ); //page 2 has index 1
+      }
+    }
     const model = {
-      posts: blog_posts,
+      currentPageEntries,
       blogPage: true,
       pageName: "Blog",
+      pageInfo,
     };
     res.render("blog.hbs", model);
   });
@@ -435,10 +479,30 @@ app.post("/blog/delete/:id", function (req, res) {
 app.get("/contact", function (req, res) {
   const query = "SELECT * FROM faq_entries";
   db.all(query, function (error, faq_entries) {
+    const currentPageNr = parseInt(req.query.page) || 1;
+    let currentPageEntries = [];
+
+    const pageInfo = RetrievePageInfo(
+      currentPageNr,
+      faq_entries,
+      FAQ_ENTRIES_PER_PAGE
+    );
+
+    for (let i = 0; i < FAQ_ENTRIES_PER_PAGE; i++) {
+      if (
+        faq_entries[i + (pageInfo.currentPageNr - 1) * FAQ_ENTRIES_PER_PAGE]
+      ) {
+        currentPageEntries.push(
+          faq_entries[i + (pageInfo.currentPageNr - 1) * FAQ_ENTRIES_PER_PAGE]
+        ); //page 2 has index 1
+      }
+    }
+
     const model = {
-      entries: faq_entries,
+      entries: currentPageEntries,
       contactPage: true,
       pageName: "Contact",
+      pageInfo,
     };
     res.render("contact.hbs", model);
   });
@@ -585,18 +649,51 @@ app.post("/contact/delete/:id", function (req, res) {
   }
 });
 
+function RetrievePageInfo(currentPageNr, Table, entriesPerPage) {
+  const prevPageNr = currentPageNr - 1;
+  const nextPageNr = currentPageNr + 1;
+  let finalPage = false;
+  let firstPageNumberIsNeeded = false;
+  let finalPageNumberIsNeeded = false;
+  let pagesNeeded = 0; //0 is falsy and therefore useful. we will of course need at least one page
+
+  if (Table.length > entriesPerPage) {
+    pagesNeeded = Table.length / entriesPerPage;
+    pagesNeeded = Math.ceil(pagesNeeded);
+    if (nextPageNr < pagesNeeded) {
+      finalPageNumberIsNeeded = true;
+    }
+    if (prevPageNr > 1) {
+      firstPageNumberIsNeeded = true;
+    }
+    if (currentPageNr >= pagesNeeded) {
+      finalPage = true;
+    }
+  }
+  if (currentPageNr > pagesNeeded) {
+    currentPageNr = 1;
+  }
+
+  return {
+    currentPageNr,
+    prevPageNr,
+    nextPageNr,
+    finalPage,
+    firstPageNumberIsNeeded,
+    finalPageNumberIsNeeded,
+    pagesNeeded,
+  };
+}
+
 app.listen(8080);
 //change to 80 later (supposedly the standard)
 
 // app.get ('/mainpage', function (req, res){}) is a middlewear
 
 //TODO:
-// - reverse chronological order
 // - find a way to preselect list items in work submittion failure
 // - actually check image names instead of just hard coding one
-// - be able to remove posts
-// - be able to update posts
-// - add cancel and delete buttons to contact edit page
+// - replace all placeholder entries
 
 // - Add pagination
 // - Add search engine

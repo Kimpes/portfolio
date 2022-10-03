@@ -7,9 +7,9 @@
       >Create New Post</a>
     </div>
   {{/if}}
-  {{#if posts.length}}
+  {{#if currentPageEntries.length}}
     <div class="blog-container">
-      {{#each posts}}
+      {{#each currentPageEntries}}
         <div class="blog-entry">
           <h2>{{title}}</h2>
           <p>{{description}}</p>
@@ -24,3 +24,50 @@
     <h2>Oops, no blog posts to show</h2>
   {{/if}}
 </main>
+{{#if pageInfo.pagesNeeded}}
+  <footer>
+    <div class="pagination-container">
+      <ul class="pagination">
+        {{#if pageInfo.prevPageNr}}
+        <li class="page-item">
+          <a href="?page={{pageInfo.prevPageNr}}">Previous</a>
+        </li>
+        {{/if}}
+        {{#if pageInfo.firstPageNumberIsNeeded}}
+          <li class="page-item">
+            <a href="?page=1">1</a>
+          </li>
+          <li class="page-item">
+            <span>...</span>
+          </li>
+        {{/if}}
+        {{#if pageInfo.prevPageNr}}
+        <li class="page-item">
+          <a href="?page={{pageInfo.prevPageNr}}">{{pageInfo.prevPageNr}}</a>
+        </li>
+        {{/if}}
+        <li class="page-item disabled">
+          <a href="?page={{pageInfo.currentPageNr}}">{{pageInfo.currentPageNr}}</a>
+        </li>
+        {{#unless pageInfo.finalPage}}
+          <li class="page-item">
+            <a href="?page={{pageInfo.nextPageNr}}">{{pageInfo.nextPageNr}}</a>
+          </li>
+        {{/unless}}
+        {{#if pageInfo.finalPageNumberIsNeeded}}
+          <li class="page-item">
+            <span>...</span>
+          </li>
+          <li class="page-item">
+            <a href="?page={{pageInfo.pagesNeeded}}">{{pageInfo.pagesNeeded}}</a>
+          </li>
+        {{/if}}
+        {{#unless pageInfo.finalPage}}
+          <li class="page-item">
+            <a href="?page={{pageInfo.nextPageNr}}">Next</a>
+          </li>
+        {{/unless}}
+      </ul>
+    </div>
+  </footer>
+{{/if}}
