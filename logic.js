@@ -1,9 +1,8 @@
 const express = require("express");
 const expressHandlebars = require("express-handlebars");
 const expressSession = require("express-session");
-const sqlite3 = require("sqlite3");
 const app = express();
-const db = new sqlite3.Database("public/database.db");
+const dbFile = require("./db.js");
 
 const ADMIN_NAME = "Kimpes";
 const ADMIN_PASSWORD = "123";
@@ -79,8 +78,7 @@ app.post("/logout", function (req, res) {
 
 //leads to display of portfolio
 app.get("/works", function (req, res) {
-  const query = "SELECT * FROM portfolio_entries";
-  db.all(query, function (error, portfolio_entries) {
+  dbFile.getAllPortfolioEntries(function (error, portfolio_entries) {
     //loops through all dates and makes them readable
     for (const entry of portfolio_entries) {
       const postTime = new Date(entry.post_date);
@@ -164,19 +162,21 @@ app.post("/works/create", function (req, res) {
   if (errorMessages.length) {
     res.render("works-create.hbs", failureModel);
   } else {
-    const currentTime = new Date();
-    const postDate = currentTime.getTime();
-    const query =
-      "INSERT INTO portfolio_entries (title, description, post_date, tag_1, tag_2, image_name) VALUES (?, ?, ?, ?, ?, ?)";
-    const values = [title, description, postDate, tag1, tag2, imageName];
-    db.run(query, values, function (error) {
-      if (error) {
-        errorMessages.push(error);
-        res.render("works-create.hbs", failureModel);
-      } else {
-        res.redirect("/works");
+    dbFile.createPortfolioEntry(
+      title,
+      description,
+      tag1,
+      tag2,
+      imageName,
+      function (error) {
+        if (error) {
+          errorMessages.push(error);
+          res.render("works-create.hbs", failureModel);
+        } else {
+          res.redirect("/works");
+        }
       }
-    });
+    );
   }
 });
 app.get("/works/edit/:id", function (req, res) {
@@ -188,9 +188,8 @@ app.get("/works/edit/:id", function (req, res) {
     const failureModel = {
       errorMessages,
     };
-    const query = "SELECT * FROM portfolio_entries WHERE portfolioID = ? ";
 
-    db.get(query, [id], function (error, entry) {
+    dbFile.selectPortfolioEntry(id, function (error, entry) {
       if (error) {
         errorMessages.push("Internal server error");
         res.render("works-create.hbs", failureModel);
@@ -252,17 +251,22 @@ app.post("/works/edit/:id", function (req, res) {
     if (errorMessages.length) {
       res.render("works-create.hbs", failureModel);
     } else {
-      const query =
-        "UPDATE portfolio_entries SET title = ?, description = ?, tag_1 = ?, tag_2 = ?, image_name = ? WHERE portfolioID = ?";
-      const values = [title, description, tag1, tag2, imageName, id];
-      db.run(query, values, function (error) {
-        if (error) {
-          errorMessages.push("Internal server error");
-          res.render("works-create.hbs", failureModel);
-        } else {
-          res.redirect("/works");
+      dbFile.updatePortfolioEntry(
+        title,
+        description,
+        tag1,
+        tag2,
+        imageName,
+        id,
+        function (error) {
+          if (error) {
+            errorMessages.push("Internal server error");
+            res.render("works-create.hbs", failureModel);
+          } else {
+            res.redirect("/works");
+          }
         }
-      });
+      );
     }
   }
 });
@@ -282,8 +286,8 @@ app.post("/works/delete/:id", function (req, res) {
       imageName,
       errorMessages,
     };
-    const query = "DELETE FROM portfolio_entries WHERE portfolioID = ?";
-    db.run(query, [id], function (error) {
+
+    dbFile.deletePortfolioEntry(id, function (error) {
       if (error) {
         errorMessages.push("Internal server error");
         res.render("works-create.hbs", failureModel);
@@ -295,8 +299,7 @@ app.post("/works/delete/:id", function (req, res) {
 });
 
 app.get("/blog", function (req, res) {
-  const query = "SELECT * FROM blog_posts";
-  db.all(query, function (error, blog_posts) {
+  dbFile.getAllBlogPosts(function (error, blog_posts) {
     for (const post of blog_posts) {
       const postTime = new Date(post.post_date);
       post.post_date = postTime.toDateString();
@@ -361,12 +364,7 @@ app.post("/blog/create", function (req, res) {
   if (errorMessages.length) {
     res.render("blog-create.hbs", failureModel);
   } else {
-    const currentTime = new Date();
-    const postDate = currentTime.getTime();
-    const query =
-      "INSERT INTO blog_posts (title, description, post_date) VALUES (?, ?, ?)";
-    const values = [title, description, postDate];
-    db.run(query, values, function (error) {
+    dbFile.createBlogPost(title, description, function (error) {
       if (error) {
         errorMessages.push("Internal server error");
         res.render("blog-create.hbs", failureModel);
@@ -385,9 +383,8 @@ app.get("/blog/edit/:id", function (req, res) {
     const failureModel = {
       errorMessages,
     };
-    const query = "SELECT * FROM blog_posts WHERE blogID = ? ";
 
-    db.get(query, [id], function (error, entry) {
+    dbFile.selectBlogPost(id, function (error, entry) {
       if (error) {
         errorMessages.push("Internal server error");
         res.render("blog-create.hbs", failureModel);
@@ -436,10 +433,7 @@ app.post("/blog/edit/:id", function (req, res) {
     if (errorMessages.length) {
       res.render("blog-create.hbs", failureModel);
     } else {
-      const query =
-        "UPDATE blog_posts SET title = ?, description = ? WHERE blogID = ?";
-      const values = [title, description, id];
-      db.run(query, values, function (error) {
+      dbFile.updateBlogPost(title, description, id, function (error) {
         if (error) {
           errorMessages.push("Internal server error");
           res.render("blog-create.hbs", failureModel);
@@ -464,8 +458,7 @@ app.post("/blog/delete/:id", function (req, res) {
       description,
       errorMessages,
     };
-    const query = "DELETE FROM blog_posts WHERE blogID = ?";
-    db.run(query, [id], function (error) {
+    dbFile.deleteBlogPost(id, function (error) {
       if (error) {
         errorMessages.push("Internal server error");
         res.render("blog-create.hbs", failureModel);
@@ -477,8 +470,7 @@ app.post("/blog/delete/:id", function (req, res) {
 });
 
 app.get("/contact", function (req, res) {
-  const query = "SELECT * FROM faq_entries";
-  db.all(query, function (error, faq_entries) {
+  dbFile.getAllFaqEntries(function (error, faq_entries) {
     const currentPageNr = parseInt(req.query.page) || 1;
     let currentPageEntries = [];
 
@@ -539,9 +531,7 @@ app.post("/contact/create", function (req, res) {
   if (errorMessages.length) {
     res.render("contact-create.hbs", failureModel);
   } else {
-    const query = "INSERT INTO faq_entries (question, answer) VALUES (?, ?)";
-    const values = [question, answer];
-    db.run(query, values, function (error) {
+    dbFile.createFaqEntry(question, answer, function (error) {
       if (error) {
         errorMessages.push("Internal server error");
         res.render("contact-create.hbs", failureModel);
@@ -560,9 +550,8 @@ app.get("/contact/edit/:id", function (req, res) {
     const failureModel = {
       errorMessages,
     };
-    const query = "SELECT * FROM faq_entries WHERE faqID = ? ";
 
-    db.get(query, [id], function (error, entry) {
+    dbFile.selectFaqEntry(id, function (error, entry) {
       if (error) {
         errorMessages.push("Internal server error");
         res.render("contact-create.hbs", failureModel);
@@ -609,10 +598,7 @@ app.post("/contact/edit/:id", function (req, res) {
     if (errorMessages.length) {
       res.render("contact-create.hbs", failureModel);
     } else {
-      const query =
-        "UPDATE faq_entries SET question = ?, answer = ? WHERE faqID = ? ";
-      const values = [question, answer, id];
-      db.run(query, values, function (error) {
+      dbFile.updateFaqEntry(question, answer, id, function (error) {
         if (error) {
           errorMessages.push("Internal server error");
           res.render("contact-create.hbs", failureModel);
@@ -637,8 +623,8 @@ app.post("/contact/delete/:id", function (req, res) {
       answer,
       errorMessages,
     };
-    const query = "DELETE FROM faq_entries WHERE faqID = ?";
-    db.run(query, [id], function (error) {
+
+    dbFile.deleteFaqEntry(id, function (error) {
       if (error) {
         errorMessages.push("Internal server error");
         res.render("contact-create.hbs", failureModel);
@@ -649,16 +635,16 @@ app.post("/contact/delete/:id", function (req, res) {
   }
 });
 
-function RetrievePageInfo(currentPageNr, Table, entriesPerPage) {
+function RetrievePageInfo(currentPageNr, table, entriesPerPage) {
   const prevPageNr = currentPageNr - 1;
   const nextPageNr = currentPageNr + 1;
-  let finalPage = false;
+  let isFinalPage = false;
   let firstPageNumberIsNeeded = false;
   let finalPageNumberIsNeeded = false;
   let pagesNeeded = 0; //0 is falsy and therefore useful. we will of course need at least one page
 
-  if (Table.length > entriesPerPage) {
-    pagesNeeded = Table.length / entriesPerPage;
+  if (table.length > entriesPerPage) {
+    pagesNeeded = table.length / entriesPerPage;
     pagesNeeded = Math.ceil(pagesNeeded);
     if (nextPageNr < pagesNeeded) {
       finalPageNumberIsNeeded = true;
@@ -667,7 +653,7 @@ function RetrievePageInfo(currentPageNr, Table, entriesPerPage) {
       firstPageNumberIsNeeded = true;
     }
     if (currentPageNr >= pagesNeeded) {
-      finalPage = true;
+      isFinalPage = true;
     }
   }
   if (currentPageNr > pagesNeeded) {
@@ -678,7 +664,7 @@ function RetrievePageInfo(currentPageNr, Table, entriesPerPage) {
     currentPageNr,
     prevPageNr,
     nextPageNr,
-    finalPage,
+    finalPage: isFinalPage,
     firstPageNumberIsNeeded,
     finalPageNumberIsNeeded,
     pagesNeeded,
@@ -688,13 +674,17 @@ function RetrievePageInfo(currentPageNr, Table, entriesPerPage) {
 app.listen(8080);
 //change to 80 later (supposedly the standard)
 
-// app.get ('/mainpage', function (req, res){}) is a middlewear
-
 //TODO:
 // - find a way to preselect list items in work submittion failure
 // - actually check image names instead of just hard coding one
-// - replace all placeholder entries
+// - replace all placeholder entries with real ones
+// - make the blog and FAQ look passable (optional)
+// - make sure all names are good
+// - split database & http script into two files
+// - make resources have their own files using routers
 
-// - Add pagination
-// - Add search engine
+//HIGH LEVEL TASKS:
+// - Add search engine (optional)
 // - Add image upload
+// - explore all security vulnerabilities
+// - make code structure more structure

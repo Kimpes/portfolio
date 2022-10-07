@@ -57,7 +57,7 @@
         <li class="page-item disabled">
           <a href="?page={{pageInfo.currentPageNr}}">{{pageInfo.currentPageNr}}</a>
         </li>
-        {{#unless pageInfo.finalPage}}
+        {{#unless pageInfo.isFinalPage}}
           <li class="page-item">
             <a href="?page={{pageInfo.nextPageNr}}">{{pageInfo.nextPageNr}}</a>
           </li>
@@ -70,7 +70,7 @@
             <a href="?page={{pageInfo.pagesNeeded}}">{{pageInfo.pagesNeeded}}</a>
           </li>
         {{/if}}
-        {{#unless pageInfo.finalPage}}
+        {{#unless pageInfo.isFinalPage}}
           <li class="page-item">
             <a href="?page={{pageInfo.nextPageNr}}">Next</a>
           </li>
