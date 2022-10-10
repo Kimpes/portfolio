@@ -92,7 +92,7 @@ app.listen(8080);
 //change to 80 later (supposedly the standard)
 
 //TODO:
-// - find a way to preselect list items in work submittion failure
+// - find a way to preselect list items in work submittion failure (optional)
 // - actually check image names instead of just hard coding one
 // - replace all placeholder entries with real ones
 // - make the blog and FAQ look passable (optional)
@@ -100,7 +100,6 @@ app.listen(8080);
 // - delete the hash file
 
 //HIGH LEVEL TASKS:
-// - Add search engine (optional)
 // - Add image upload
 // - explore all security vulnerabilities
-// - make code structure more structure
+// - prepare for launch
