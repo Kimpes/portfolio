@@ -97,9 +97,7 @@ app.listen(8080);
 // - replace all placeholder entries with real ones
 // - make the blog and FAQ look passable (optional)
 // - make sure all names are good
-// - make resources have their own files using routers
-// - regarding copy pasting consts at the top
-// - hash the password
+// - delete the hash file
 
 //HIGH LEVEL TASKS:
 // - Add search engine (optional)
