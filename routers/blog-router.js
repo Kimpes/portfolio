@@ -2,11 +2,8 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 const db = require("../db.js");
-const logic = require("../logic.js");
-
-const MAX_TITLE_LENGTH = 256;
-const MAX_DESCRIPTION_LENGTH = 1024;
-const BLOG_POSTS_PER_PAGE = 2;
+const universalFunctions = require("../universalFunctions.js");
+const constants = require("../constants.js");
 
 router.get("/", function (req, res) {
   db.getAllBlogPosts(function (error, blog_posts) {
@@ -18,16 +15,26 @@ router.get("/", function (req, res) {
     const currentPageNr = parseInt(req.query.page) || 1;
     let currentPageEntries = [];
 
-    const pageInfo = logic.RetrievePageInfo(
+    const pageInfo = universalFunctions.retrievePageInfo(
       currentPageNr,
       blog_posts,
-      BLOG_POSTS_PER_PAGE
+      constants.constantVariables.BLOG_POSTS_PER_PAGE
     );
 
-    for (let i = 0; i < BLOG_POSTS_PER_PAGE; i++) {
-      if (blog_posts[i + (pageInfo.currentPageNr - 1) * BLOG_POSTS_PER_PAGE]) {
+    for (let i = 0; i < constants.constantVariables.BLOG_POSTS_PER_PAGE; i++) {
+      if (
+        blog_posts[
+          i +
+            (pageInfo.currentPageNr - 1) *
+              constants.constantVariables.BLOG_POSTS_PER_PAGE
+        ]
+      ) {
         currentPageEntries.push(
-          blog_posts[i + (pageInfo.currentPageNr - 1) * BLOG_POSTS_PER_PAGE]
+          blog_posts[
+            i +
+              (pageInfo.currentPageNr - 1) *
+                constants.constantVariables.BLOG_POSTS_PER_PAGE
+          ]
         ); //page 2 has index 1
       }
     }
@@ -58,15 +65,17 @@ router.post("/create", function (req, res) {
   if (!title.length || !description.length) {
     errorMessages.push("All fields must contain text");
   }
-  if (title.length > MAX_TITLE_LENGTH) {
+  if (title.length > constants.constantVariables.MAX_TITLE_LENGTH) {
     errorMessages.push(
-      "Title cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+      "Title cannot be longer than " +
+        constants.constantVariables.MAX_TITLE_LENGTH +
+        " characters"
     );
   }
-  if (title.length > MAX_DESCRIPTION_LENGTH) {
+  if (title.length > constants.constantVariables.MAX_DESCRIPTION_LENGTH) {
     errorMessages.push(
       "Description cannot be longer than " +
-        MAX_DESCRIPTION_LENGTH +
+        constants.constantVariables.MAX_DESCRIPTION_LENGTH +
         " characters"
     );
   }
@@ -127,15 +136,19 @@ router.post("/edit/:id", function (req, res) {
     if (!title.length || !description.length) {
       errorMessages.push("All fields must contain text");
     }
-    if (title.length > MAX_TITLE_LENGTH) {
+    if (title.length > constants.constantVariables.MAX_TITLE_LENGTH) {
       errorMessages.push(
-        "Title cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+        "Title cannot be longer than " +
+          constants.constantVariables.MAX_TITLE_LENGTH +
+          " characters"
       );
     }
-    if (description.length > MAX_DESCRIPTION_LENGTH) {
+    if (
+      description.length > constants.constantVariables.MAX_DESCRIPTION_LENGTH
+    ) {
       errorMessages.push(
         "Description cannot be longer than " +
-          MAX_DESCRIPTION_LENGTH +
+          constants.constantVariables.MAX_DESCRIPTION_LENGTH +
           " characters"
       );
     }

@@ -2,18 +2,11 @@ const express = require("express");
 const expressHandlebars = require("express-handlebars");
 const expressSession = require("express-session");
 const app = express();
-const db = require("./db.js");
 const worksRouter = require("./routers/works-router.js");
 const blogRouter = require("./routers/blog-router.js");
 const contactRouter = require("./routers/contact-router.js");
-
-const ADMIN_NAME = "Kimpes";
-const ADMIN_PASSWORD = "123";
-const MAX_TITLE_LENGTH = 256;
-const MAX_DESCRIPTION_LENGTH = 1024;
-const FAQ_ENTRIES_PER_PAGE = 5;
-const BLOG_POSTS_PER_PAGE = 2;
-const WORK_ENTRIES_PER_PAGE = 2;
+const constants = require("./constants.js");
+const bcrypt = require("bcrypt");
 
 app.engine(
   "hbs",
@@ -65,8 +58,20 @@ app.post("/login", function (req, res) {
     pageName: "Home",
   };
 
-  if (username != ADMIN_NAME || password != ADMIN_PASSWORD) {
+  if (username != constants.constantVariables.ADMIN_NAME) {
     errorMessages.push("Incorrect login information");
+  } else {
+    bcrypt.compare(
+      password,
+      constants.constantVariables.ADMIN_PASSWORD_HASH,
+      function (error, result) {
+        if (error) {
+          errorMessages.push("Internal application error");
+        } else if (!result) {
+          errorMessages.push("Incorrect login information");
+        }
+      }
+    );
   }
 
   if (errorMessages.length) {
@@ -83,42 +88,6 @@ app.post("/logout", function (req, res) {
   res.redirect("/");
 });
 
-exports.RetrievePageInfo = function (currentPageNr, table, entriesPerPage) {
-  const prevPageNr = currentPageNr - 1;
-  const nextPageNr = currentPageNr + 1;
-  let isFinalPage = false;
-  let firstPageNumberIsNeeded = false;
-  let finalPageNumberIsNeeded = false;
-  let pagesNeeded = 0; //0 is falsy and therefore useful. we will of course need at least one page
-
-  if (table.length > entriesPerPage) {
-    pagesNeeded = table.length / entriesPerPage;
-    pagesNeeded = Math.ceil(pagesNeeded);
-    if (nextPageNr < pagesNeeded) {
-      finalPageNumberIsNeeded = true;
-    }
-    if (prevPageNr > 1) {
-      firstPageNumberIsNeeded = true;
-    }
-    if (currentPageNr >= pagesNeeded) {
-      isFinalPage = true;
-    }
-  }
-  if (currentPageNr > pagesNeeded) {
-    currentPageNr = 1;
-  }
-
-  return {
-    currentPageNr,
-    prevPageNr,
-    nextPageNr,
-    isFinalPage,
-    firstPageNumberIsNeeded,
-    finalPageNumberIsNeeded,
-    pagesNeeded,
-  };
-};
-
 app.listen(8080);
 //change to 80 later (supposedly the standard)
 
@@ -130,6 +99,7 @@ app.listen(8080);
 // - make sure all names are good
 // - make resources have their own files using routers
 // - regarding copy pasting consts at the top
+// - hash the password
 
 //HIGH LEVEL TASKS:
 // - Add search engine (optional)

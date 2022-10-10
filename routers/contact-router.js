@@ -2,29 +2,34 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 const db = require("../db.js");
-const logic = require("../logic.js");
-
-const MAX_TITLE_LENGTH = 256;
-const MAX_DESCRIPTION_LENGTH = 1024;
-const FAQ_ENTRIES_PER_PAGE = 5;
+const universalFunctions = require("../universalFunctions.js");
+const constants = require("../constants.js");
 
 router.get("/", function (req, res) {
   db.getAllFaqEntries(function (error, faq_entries) {
     const currentPageNr = parseInt(req.query.page) || 1;
     let currentPageEntries = [];
 
-    const pageInfo = logic.RetrievePageInfo(
+    const pageInfo = universalFunctions.retrievePageInfo(
       currentPageNr,
       faq_entries,
-      FAQ_ENTRIES_PER_PAGE
+      constants.constantVariables.FAQ_ENTRIES_PER_PAGE
     );
 
-    for (let i = 0; i < FAQ_ENTRIES_PER_PAGE; i++) {
+    for (let i = 0; i < constants.constantVariables.FAQ_ENTRIES_PER_PAGE; i++) {
       if (
-        faq_entries[i + (pageInfo.currentPageNr - 1) * FAQ_ENTRIES_PER_PAGE]
+        faq_entries[
+          i +
+            (pageInfo.currentPageNr - 1) *
+              constants.constantVariables.FAQ_ENTRIES_PER_PAGE
+        ]
       ) {
         currentPageEntries.push(
-          faq_entries[i + (pageInfo.currentPageNr - 1) * FAQ_ENTRIES_PER_PAGE]
+          faq_entries[
+            i +
+              (pageInfo.currentPageNr - 1) *
+                constants.constantVariables.FAQ_ENTRIES_PER_PAGE
+          ]
         ); //page 2 has index 1
       }
     }
@@ -56,14 +61,18 @@ router.post("/create", function (req, res) {
   if (!question.length || !answer.length) {
     errorMessages.push("All fields must contain text");
   }
-  if (question.length > MAX_TITLE_LENGTH) {
+  if (question.length > constants.constantVariables.MAX_TITLE_LENGTH) {
     errorMessages.push(
-      "Question cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+      "Question cannot be longer than " +
+        constants.constantVariables.MAX_TITLE_LENGTH +
+        " characters"
     );
   }
-  if (answer.length > MAX_DESCRIPTION_LENGTH) {
+  if (answer.length > constants.constantVariables.MAX_DESCRIPTION_LENGTH) {
     errorMessages.push(
-      "Answer cannot be longer than " + MAX_DESCRIPTION_LENGTH + " characters"
+      "Answer cannot be longer than " +
+        constants.constantVariables.MAX_DESCRIPTION_LENGTH +
+        " characters"
     );
   }
 
@@ -123,14 +132,18 @@ router.post("/edit/:id", function (req, res) {
     if (!question.length || !answer.length) {
       errorMessages.push("All fields must contain text");
     }
-    if (question.length > MAX_TITLE_LENGTH) {
+    if (question.length > constants.constantVariables.MAX_TITLE_LENGTH) {
       errorMessages.push(
-        "Question cannot be longer than " + MAX_TITLE_LENGTH + " characters"
+        "Question cannot be longer than " +
+          constants.constantVariables.MAX_TITLE_LENGTH +
+          " characters"
       );
     }
-    if (answer.length > MAX_DESCRIPTION_LENGTH) {
+    if (answer.length > constants.constantVariables.MAX_DESCRIPTION_LENGTH) {
       errorMessages.push(
-        "Answer cannot be longer than " + MAX_DESCRIPTION_LENGTH + " characters"
+        "Answer cannot be longer than " +
+          constants.constantVariables.MAX_DESCRIPTION_LENGTH +
+          " characters"
       );
     }
 
