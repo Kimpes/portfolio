@@ -84,14 +84,14 @@ router.post("/create", function (req, res) {
         errorMessages.push("Internal server error");
         res.render("contact-create.hbs", failureModel);
       } else {
-        res.redirect("/");
+        res.redirect("/contact");
       }
     });
   }
 });
 router.get("/edit/:id", function (req, res) {
   if (!req.session.isLoggedIn) {
-    res.redirect("/");
+    res.redirect("/contact");
   } else {
     const id = req.params.id;
     const errorMessages = [];
@@ -116,7 +116,7 @@ router.get("/edit/:id", function (req, res) {
 });
 router.post("/edit/:id", function (req, res) {
   if (!req.session.isLoggedIn) {
-    res.redirect("/");
+    res.redirect("/contact");
   } else {
     const id = req.params.id;
     const question = req.body.question;
@@ -155,7 +155,7 @@ router.post("/edit/:id", function (req, res) {
           errorMessages.push("Internal server error");
           res.render("contact-create.hbs", failureModel);
         } else {
-          res.redirect("/");
+          res.redirect("/contact");
         }
       });
     }
@@ -163,7 +163,7 @@ router.post("/edit/:id", function (req, res) {
 });
 router.post("/delete/:id", function (req, res) {
   if (!req.session.isLoggedIn) {
-    res.redirect("/");
+    res.redirect("/contact");
   } else {
     const id = req.params.id;
     const question = req.body.question;
@@ -181,7 +181,7 @@ router.post("/delete/:id", function (req, res) {
         errorMessages.push("Internal server error");
         res.render("contact-create.hbs", failureModel);
       } else {
-        res.redirect("/");
+        res.redirect("/contact");
       }
     });
   }

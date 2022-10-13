@@ -12,7 +12,7 @@
     {{#if currentPageEntries.length}}
       {{#each currentPageEntries}}
         <div class="work-container has-shadow">
-          <img src="/images/{{image_name}}.png" alt="" class="work-thumbnail" />
+          <img src="/uploads/{{image_name}}" alt="" class="work-thumbnail" />
           <div class="work-info-container">
             <h1 class="work-title">{{title}}</h1>
             <div class="work-tags-container">
@@ -22,7 +22,7 @@
             <p class="work-info">{{description}}</p>
             <p class="work-date">{{post_date}}</p>
             {{#if ../session.isLoggedIn}}
-              <a href="/works/edit/{{portfolioID}}" class="edit-button">Edit</a>
+              <a href="/works/edit/{{portfolioID}}" class="edit-button works">Edit</a>
             {{/if}}
           </div>
         </div>

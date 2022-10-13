@@ -4,6 +4,21 @@ const router = express.Router();
 const db = require("../db.js");
 const universalFunctions = require("../universalFunctions.js");
 const constants = require("../constants.js");
+const multer = require("multer");
+
+//code pertaining to image upload cited from https://www.npmjs.com/package/multer
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, "./public/uploads");
+  },
+  filename(req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({
+  storage,
+});
 
 router.get("/", function (req, res) {
   db.getAllPortfolioEntries(function (error, portfolio_entries) {
@@ -57,23 +72,31 @@ router.get("/create", function (req, res) {
     res.render("works-create.hbs");
   }
 });
-router.post("/create", function (req, res) {
+router.post("/create", upload.single("imageName"), function (req, res) {
   const title = req.body.title;
   const description = req.body.description;
   const tag1 = req.body.tag1;
   const tag2 = req.body.tag2;
-  const imageName = req.body.imageName;
+  let imageName;
   const errorMessages = [];
   const failureModel = {
     title,
     description,
     tag1,
     tag2,
-    imageName,
     errorMessages,
   };
 
-  if (!title.length || !description.length || !imageName.length) {
+  if (req.file) {
+    if (req.file.size > 10000000) {
+      errorMessages.push("Image size can't be bigger than 10 MB");
+    }
+    imageName = req.file.filename;
+  } else {
+    errorMessages.push("Image is required to add an entry");
+  }
+
+  if (!title.length || !description.length) {
     errorMessages.push("No fields can be left empty");
   }
   if (title.length > constants.constantVariables.MAX_TITLE_LENGTH) {
@@ -89,9 +112,6 @@ router.post("/create", function (req, res) {
         constants.constantVariables.MAX_DESCRIPTION_LENGTH +
         " characters"
     );
-  }
-  if (imageName != "work_skogskott" && imageName.length) {
-    errorMessages.push("Image name does not exist in file system");
   }
   if (tag1 == tag2) {
     errorMessages.push("Both tags cannot be the same");
@@ -111,7 +131,7 @@ router.post("/create", function (req, res) {
           errorMessages.push(error);
           res.render("works-create.hbs", failureModel);
         } else {
-          res.redirect("/");
+          res.redirect("/works");
         }
       }
     );
@@ -145,7 +165,7 @@ router.get("/edit/:id", function (req, res) {
 });
 router.post("/edit/:id", function (req, res) {
   if (!req.session.isLoggedIn) {
-    res.redirect("/blog");
+    res.redirect("/works");
   } else {
     const id = req.params.id;
     const title = req.body.title;
@@ -203,7 +223,7 @@ router.post("/edit/:id", function (req, res) {
             errorMessages.push("Internal server error");
             res.render("works-create.hbs", failureModel);
           } else {
-            res.redirect("/");
+            res.redirect("/works");
           }
         }
       );
@@ -212,7 +232,7 @@ router.post("/edit/:id", function (req, res) {
 });
 router.post("/delete/:id", function (req, res) {
   if (!req.session.isLoggedIn) {
-    res.redirect("/");
+    res.redirect("/works");
   } else {
     const id = req.params.id;
     const title = req.body.title;
@@ -232,7 +252,7 @@ router.post("/delete/:id", function (req, res) {
         errorMessages.push("Internal server error");
         res.render("works-create.hbs", failureModel);
       } else {
-        res.redirect("/");
+        res.redirect("/works");
       }
     });
   }

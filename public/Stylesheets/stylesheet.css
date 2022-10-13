@@ -292,12 +292,19 @@ textarea {
 .work-date {
   padding-left: 3px;
   padding-bottom: 30px;
+  margin-bottom: 0px;
 }
 .works-go-to-create-button {
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin: 0vh 10vh 0vh 10vh;
+}
+.edit-button.works {
+  position: relative;
+  bottom: 20px;
+  padding-bottom: 20px;
+  margin-left: 4px;
 }
 @media screen and (max-width: 900px) {
   .work-container {

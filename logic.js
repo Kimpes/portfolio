@@ -95,7 +95,7 @@ app.listen(8080);
 // - find a way to preselect list items in work submittion failure (optional)
 // - actually check image names instead of just hard coding one
 // - replace all placeholder entries with real ones
-// - make the blog and FAQ look passable (optional)
+// - make the website look passable (optional)
 // - make sure all names are good
 // - delete the hash file
 
