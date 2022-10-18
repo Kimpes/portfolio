@@ -14,6 +14,7 @@ app.engine(
     defaultLayout: "main.hbs",
   })
 );
+app.set("views", "./views");
 app.set("view engine", "hbs");
 
 app.use(express.static("public"));
@@ -98,7 +99,6 @@ app.listen(8080);
 // - make the website look passable (optional)
 // - make sure all names are good
 // - delete the hash file
-// - don't upload image if too big
 
 //HIGH LEVEL TASKS:
 // - explore all security vulnerabilities
