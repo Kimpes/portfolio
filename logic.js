@@ -14,7 +14,7 @@ app.engine(
     defaultLayout: "main.hbs",
   })
 );
-app.set("views", "./views");
+app.set("views", "./Views");
 app.set("view engine", "hbs");
 
 app.use(express.static("public"));
