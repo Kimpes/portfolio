@@ -45,7 +45,7 @@ app.use("/contact", contactRouter);
 //leads to the homepage
 app.get("/", function (req, res) {
   const model = { homePage: true, pageName: "Home" };
-  res.render("index.hbs", model);
+  res.render("index", model);
 });
 app.post("/login", function (req, res) {
   const username = req.body.username;
