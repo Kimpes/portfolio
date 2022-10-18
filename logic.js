@@ -60,6 +60,7 @@ app.post("/login", function (req, res) {
 
   if (username != constants.constantVariables.ADMIN_NAME) {
     errorMessages.push("Incorrect login information");
+    res.render("index.hbs", failureModel);
   } else {
     bcrypt.compare(
       password,
@@ -67,18 +68,18 @@ app.post("/login", function (req, res) {
       function (error, result) {
         if (error) {
           errorMessages.push("Internal application error");
-        } else if (!result) {
+        }
+        if (!result) {
           errorMessages.push("Incorrect login information");
+        }
+        if (errorMessages.length) {
+          res.render("index.hbs", failureModel);
+        } else {
+          req.session.isLoggedIn = true;
+          res.redirect("/");
         }
       }
     );
-  }
-
-  if (errorMessages.length) {
-    res.render("index.hbs", failureModel);
-  } else {
-    req.session.isLoggedIn = true;
-    res.redirect("/");
   }
 });
 app.post("/logout", function (req, res) {
@@ -93,13 +94,12 @@ app.listen(8080);
 
 //TODO:
 // - find a way to preselect list items in work submittion failure (optional)
-// - actually check image names instead of just hard coding one
 // - replace all placeholder entries with real ones
 // - make the website look passable (optional)
 // - make sure all names are good
 // - delete the hash file
+// - don't upload image if too big
 
 //HIGH LEVEL TASKS:
-// - Add image upload
 // - explore all security vulnerabilities
 // - prepare for launch

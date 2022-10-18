@@ -5,6 +5,7 @@ const db = require("../db.js");
 const universalFunctions = require("../universalFunctions.js");
 const constants = require("../constants.js");
 const multer = require("multer");
+const fs = require("fs");
 
 //code pertaining to image upload cited from https://www.npmjs.com/package/multer
 const storage = multer.diskStorage({
@@ -89,7 +90,11 @@ router.post("/create", upload.single("imageName"), function (req, res) {
 
   if (req.file) {
     if (req.file.size > 10000000) {
-      errorMessages.push("Image size can't be bigger than 10 MB");
+      errorMessages.push("File size can't be bigger than 10 MB");
+    }
+    const fileExt = req.file.filename.split(".").pop();
+    if (fileExt != "png" || fileExt != "jpg" || fileExt != "JPG") {
+      errorMessages.push('File has to be of type "png" or type "jpg"');
     }
     imageName = req.file.filename;
   } else {
@@ -118,6 +123,13 @@ router.post("/create", upload.single("imageName"), function (req, res) {
   }
 
   if (errorMessages.length) {
+    if (req.file) {
+      fs.unlink(req.file.path, function (error) {
+        if (error) {
+          errorMessages.push("Internal file system error");
+        }
+      });
+    }
     res.render("works-create.hbs", failureModel);
   } else {
     db.createPortfolioEntry(
@@ -163,7 +175,7 @@ router.get("/edit/:id", function (req, res) {
     });
   }
 });
-router.post("/edit/:id", function (req, res) {
+router.post("/edit/:id", upload.single("imageName"), function (req, res) {
   if (!req.session.isLoggedIn) {
     res.redirect("/works");
   } else {
@@ -172,7 +184,7 @@ router.post("/edit/:id", function (req, res) {
     const description = req.body.description;
     const tag1 = req.body.tag1;
     const tag2 = req.body.tag2;
-    const imageName = req.body.imageName;
+    let imageName;
     const errorMessages = [];
     const failureModel = {
       id,
@@ -184,7 +196,20 @@ router.post("/edit/:id", function (req, res) {
       errorMessages,
     };
 
-    if (!title.length || !description.length || !imageName.length) {
+    if (req.file) {
+      if (req.file.size > 10000000) {
+        errorMessages.push("Image size can't be bigger than 10 MB");
+      }
+      const fileExt = req.file.filename.split(".").pop();
+      if (fileExt != "png" || fileExt != "jpg" || fileExt != "JPG") {
+        errorMessages.push('File has to be of type "png" or type "jpg"');
+      }
+      imageName = req.file.filename;
+    } else {
+      errorMessages.push("Image is required to add an entry");
+    }
+
+    if (!title.length || !description.length) {
       errorMessages.push("No fields can be left empty");
     }
     if (title.length > constants.constantVariables.MAX_TITLE_LENGTH) {
@@ -201,14 +226,18 @@ router.post("/edit/:id", function (req, res) {
           " characters"
       );
     }
-    if (imageName != "work_skogskott" && imageName.length) {
-      errorMessages.push("Image name does not exist in file system");
-    }
     if (tag1 == tag2) {
       errorMessages.push("Both tags cannot be the same");
     }
 
     if (errorMessages.length) {
+      if (req.file) {
+        fs.unlink(req.file.path, function (error) {
+          if (error) {
+            errorMessages.push("Internal file system error");
+          }
+        });
+      }
       res.render("works-create.hbs", failureModel);
     } else {
       db.updatePortfolioEntry(
