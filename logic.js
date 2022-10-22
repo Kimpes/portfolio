@@ -98,7 +98,6 @@ app.listen(8080);
 // - replace all placeholder entries with real ones
 // - make the website look passable (optional)
 // - make sure all names are good
-// - delete the hash file
 
 //HIGH LEVEL TASKS:
 // - explore all security vulnerabilities

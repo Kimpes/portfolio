@@ -1,5 +1,4 @@
 const express = require("express");
-const app = express();
 const router = express.Router();
 const db = require("../db.js");
 const universalFunctions = require("../universalFunctions.js");

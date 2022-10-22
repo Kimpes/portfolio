@@ -110,9 +110,17 @@ exports.updatePortfolioEntry = function (
   id,
   callback
 ) {
-  const query =
-    "UPDATE portfolio_entries SET title = ?, description = ?, tag_1 = ?, tag_2 = ?, image_name = ? WHERE portfolioID = ?";
-  const values = [title, description, tag1, tag2, imageName, id];
+  let query;
+  let values;
+  if (imageName == undefined) {
+    query =
+      "UPDATE portfolio_entries SET title = ?, description = ?, tag_1 = ?, tag_2 = ? WHERE portfolioID = ?";
+    values = [title, description, tag1, tag2, id];
+  } else {
+    query =
+      "UPDATE portfolio_entries SET title = ?, description = ?, tag_1 = ?, tag_2 = ?, image_name = ? WHERE portfolioID = ?";
+    values = [title, description, tag1, tag2, imageName, id];
+  }
   db.run(query, values, function (error) {
     callback(error);
   });

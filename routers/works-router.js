@@ -1,5 +1,4 @@
 const express = require("express");
-const app = express();
 const router = express.Router();
 const db = require("../db.js");
 const universalFunctions = require("../universalFunctions.js");
@@ -13,7 +12,7 @@ const storage = multer.diskStorage({
     cb(null, "./public/uploads");
   },
   filename(req, file, cb) {
-    cb(null, file.originalname);
+    cb(null, Date.now() + " - " + file.originalname);
   },
 });
 
@@ -93,7 +92,7 @@ router.post("/create", upload.single("imageName"), function (req, res) {
       errorMessages.push("File size can't be bigger than 10 MB");
     }
     const fileExt = req.file.filename.split(".").pop();
-    if (fileExt != "png" || fileExt != "jpg" || fileExt != "JPG") {
+    if (fileExt != "png" && fileExt != "jpg" && fileExt != "JPG") {
       errorMessages.push('File has to be of type "png" or type "jpg"');
     }
     imageName = req.file.filename;
@@ -201,12 +200,10 @@ router.post("/edit/:id", upload.single("imageName"), function (req, res) {
         errorMessages.push("Image size can't be bigger than 10 MB");
       }
       const fileExt = req.file.filename.split(".").pop();
-      if (fileExt != "png" || fileExt != "jpg" || fileExt != "JPG") {
+      if (fileExt != "png" && fileExt != "jpg" && fileExt != "JPG") {
         errorMessages.push('File has to be of type "png" or type "jpg"');
       }
       imageName = req.file.filename;
-    } else {
-      errorMessages.push("Image is required to add an entry");
     }
 
     if (!title.length || !description.length) {
